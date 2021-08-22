@@ -1,5 +1,4 @@
 use std::ptr::null;
-
 use rand::Rng;
 extern crate minifb;
 use minifb::{Key, Window, WindowOptions};
@@ -124,7 +123,7 @@ fn traverse_maze(mtx: &Vec<Vec<u8>>, x: usize, y: usize) -> Vec<usize>
     let mut coord = vec![0, 0];
 
     //First check if any untravelled paths remain
-    //0 = not travelled on, 1 = travelled on once, 2 = travelled on twice, i32::MAX = wall
+    //0 = not travelled on, 1 = travelled on once, 2 = travelled on twice, u8::MAX = wall
     let mut trav = check_for_traveled(mtx, x, y, 0); 
     let mut k = 0;
 
