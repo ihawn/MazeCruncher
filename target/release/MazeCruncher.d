@@ -1,1 +1,0 @@
-C:\Users\Isaac\Documents\Rust\MazeCruncher\target\release\MazeCruncher.exe: C:\Users\Isaac\Documents\Rust\MazeCruncher\src\generate.rs C:\Users\Isaac\Documents\Rust\MazeCruncher\src\main.rs C:\Users\Isaac\Documents\Rust\MazeCruncher\src\solve.rs C:\Users\Isaac\Documents\Rust\MazeCruncher\src\toimage.rs
