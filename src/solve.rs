@@ -79,7 +79,6 @@ fn tremaux(mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_scale:
         }
 
 
-
       
         //Solver
         mtx[x][y] += 1;
