@@ -1,6 +1,6 @@
 # MazeCruncher
 Welcome to maze cruncher!
-<a href="/ihawn/MazeCruncher/raw/main/target/release/MazeCruncher.exe" id="raw-url" role="button" data-view-component="true" class="btn-sm btn BtnGroup-item">
+<a href="https://github.com/ihawn/MazeCruncher/blob/main/target/release/MazeCruncher.exe" id="raw-url" role="button" data-view-component="true" class="btn-sm btn BtnGroup-item">
   
   Download
   
