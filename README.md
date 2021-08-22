@@ -18,4 +18,4 @@ Welcome to maze cruncher!
 
 ## A maze generated and solved with size = 512
 
-![alt text](https://github.com/ihawn/MazeCruncher/blob/main/target/examplemaze/solved.png)
+![alt text](https://github.com/ihawn/MazeCruncher/blob/main/target/examplemaze/Solved512.png)
