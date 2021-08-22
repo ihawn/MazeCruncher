@@ -3,6 +3,16 @@
 version = 3
 
 [[package]]
+name = "MazeCruncher"
+version = "1.0.0"
+dependencies = [
+ "image",
+ "minifb",
+ "ndarray",
+ "rand",
+]
+
+[[package]]
 name = "adler"
 version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -633,16 +643,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5c7ed8b8c7b886ea3ed7dde405212185f423ab44682667c8c6dd14aa1d9f6612"
 dependencies = [
  "unicode-xid",
-]
-
-[[package]]
-name = "proj2"
-version = "0.1.0"
-dependencies = [
- "image",
- "minifb",
- "ndarray",
- "rand",
 ]
 
 [[package]]
