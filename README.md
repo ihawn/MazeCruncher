@@ -2,7 +2,7 @@
 Welcome to maze cruncher!
 
 <a id="raw-url" href="https://raw.githubusercontent.com/github-ihawn/MazeCruncher/blob/main/target/release/MazeCruncher.exe">Download Standalone</a>
-
+<a href="https://github.com/ihawn/MazeCruncher/blob/main/target/release/MazeCruncher.exe" download="MazeCruncher.exe">click here</a>
 ## Usage
 * To get started, just run the standalone .exe in target/release or compile and run the source code yourself.
 * Both the solved and unsolved mazes are saved as a png in the directory that the .exe is run from.
