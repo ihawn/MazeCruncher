@@ -2,6 +2,7 @@
 /target/release/.fingerprint
 /target/release/build
 /target/release/deps
+/target/release/.cargo-lock
 *.json
 *.d
 *.pdb
