@@ -1,7 +1,7 @@
 # MazeCruncher
 Welcome to maze cruncher!
 
-<a id="raw-url" href="https://raw.githubusercontent.com/github-username/project/master/filename">Download FILE</a>
+<a id="raw-url" href="https://github.com/ihawn/MazeCruncher/blob/main/target/release/MazeCruncher.exe">V. 1.0.1</a>
 
 ## Usage
 * To get started, just run the standalone .exe in target/release or compile and run the source code yourself.
