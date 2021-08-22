@@ -3,6 +3,8 @@
 /target/release/build
 /target/release/deps
 /target/release/.cargo-lock
+solved.png
+unsolved.png
 *.json
 *.d
 *.pdb
