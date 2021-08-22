@@ -1,6 +1,8 @@
 # MazeCruncher
 Welcome to maze cruncher!
 
+<a id="raw-url" href="https://raw.githubusercontent.com/github-username/project/master/filename">Download FILE</a>
+
 ## Usage
 * To get started, just run the standalone .exe in target/release or compile and run the source code yourself.
 * Both the solved and unsolved mazes are saved as a png in the directory that the .exe is run from.
