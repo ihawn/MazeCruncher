@@ -4,7 +4,7 @@ use rand::Rng;
 use crate::{solve::solve_maze, toimage};
 
 
-pub fn generate_maze(mut size: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize)
+pub fn generate_maze(mut size: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize, save_maze: bool)
 {
     size *= 2;
     size += 1;
@@ -13,11 +13,11 @@ pub fn generate_maze(mut size: usize, show_animation: bool, anim_scale: usize, a
     let mut m:Vec<Vec<u8>> = vec![vec![2; N]; M];
     m = prime_matrix(m, size);
 
-    growing_tree(m, size, show_animation, anim_scale, anim_speed_mult);
+    growing_tree(m, size, show_animation, anim_scale, anim_speed_mult, save_maze);
 }
 
 //Growing Tree Algorithm for implementing a "perfect" maze
-fn growing_tree(mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize)
+fn growing_tree(mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize, save_maze: bool)
 {
     println!("Generating Maze");
     let cell_size = (size - 1)/2;
@@ -90,10 +90,13 @@ fn growing_tree(mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_s
 
 
     //print_matrix(&mtx, size);
-    toimage::mtx_to_img(&mtx, size, "unsolved.png".to_string());
+    if save_maze
+    {
+        toimage::mtx_to_img(&mtx, size, "unsolved.png".to_string());
+    }
 
     println!("Maze Generation Complete");
-    solve_maze(mtx, size, show_animation, anim_scale, anim_speed_mult)
+    solve_maze(mtx, size, show_animation, anim_scale, anim_speed_mult, save_maze)
 }
 
 //Convenience function to determine if current cell has any adjacent, non-visited cells

@@ -3,12 +3,12 @@ use rand::Rng;
 extern crate minifb;
 use minifb::{Key, Window, WindowOptions};
 
-pub fn solve_maze(mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize)
+pub fn solve_maze(mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize, save_maze: bool)
 {
-    tremaux(mtx, size, show_animation, anim_scale, anim_speed_mult);
+    tremaux(mtx, size, show_animation, anim_scale, anim_speed_mult, save_maze);
 }
 
-fn tremaux(mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize) 
+fn tremaux(mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize, save_maze: bool) 
 {
     //Graphics init
     let buff_size = size*anim_scale;
@@ -113,8 +113,10 @@ fn tremaux(mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_scale:
 
     }
 
-    crate::toimage::mtx_to_img(&mtx, size, "solved.png".to_string());
-
+    if save_maze
+    {
+        crate::toimage::mtx_to_img(&mtx, size, "solved.png".to_string());
+    }
 }
 
 fn traverse_maze(mtx: &Vec<Vec<u8>>, x: usize, y: usize) -> Vec<usize>

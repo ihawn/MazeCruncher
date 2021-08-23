@@ -8,11 +8,12 @@ mod solve;
 fn main()
 {
     println!("----------------------------------------------------");
-    println!("-----------------Maze Cruncher v1.0-----------------");
+    println!("----------------Maze Cruncher v1.0.2----------------");
     println!("----------------------------------------------------");
 
 
     let mut size: usize = 75;
+    let mut save_maze = true;
     let mut show_animation = true;
     let mut anim_scale = 4;
     let mut anim_speed = 2;
@@ -22,12 +23,17 @@ fn main()
 
     if !use_default
     {
+        save_maze = read_bool("Save the solved and unsolved maze?\ny/n".to_string());
+        if show_animation
+        {
+            println!("A solution image will be saved to this directory");
+        }
         size = read_int("Enter a maze size: ".to_string(), size);
-        println!("A solution image will be saved to this directory");
+        
 
         if size <= 2048
         {
-            show_animation = read_bool("Do you want to display the solution animation? (takes longer but looks cool)\ny/s".to_string());
+            show_animation = read_bool("Do you want to display the solution animation? (takes longer but looks cool)\ny/n".to_string());
 
             if show_animation
             {
@@ -45,7 +51,7 @@ fn main()
     println!("Initializing");
 
     let before = Instant::now();
-    generate::generate_maze(size, show_animation, anim_scale, anim_speed); //Solver is called from within generator
+    generate::generate_maze(size, show_animation, anim_scale, anim_speed, save_maze); //Solver is called from within generator
     println!("Elapsed time: {:.2?}", before.elapsed());
 
     println!("Done!");
