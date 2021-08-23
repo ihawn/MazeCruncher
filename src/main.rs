@@ -55,7 +55,7 @@ fn main()
     println!("Elapsed time: {:.2?}", before.elapsed());
 
     println!("Done!");
-    println!("Solved and unsolved images of this maze saved to this directory");
+    println!("A solved image of this maze will be saved to this directory");
     pause();
 }
 
