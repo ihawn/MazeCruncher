@@ -1,6 +1,6 @@
 [package]
 name = "MazeCruncher"
-version = "1.0.2"
+version = "1.0.3"
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -10,3 +10,4 @@ rand = "0.8.0"
 image = "0.23.14"
 ndarray = "0.15.0"
 minifb = "0.19.3"
+ux = "0.1.3"

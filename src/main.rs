@@ -8,7 +8,7 @@ mod solve;
 fn main()
 {
     println!("----------------------------------------------------");
-    println!("----------------Maze Cruncher v1.0.2----------------");
+    println!("----------------Maze Cruncher v1.0.3----------------");
     println!("----------------------------------------------------");
 
 
@@ -55,7 +55,11 @@ fn main()
     println!("Elapsed time: {:.2?}", before.elapsed());
 
     println!("Done!");
-    println!("A solved image of this maze will be saved to this directory");
+    
+    if save_maze
+    {
+        println!("Solved and unsolved images of this maze were saved to this directory");
+    }
     pause();
 }
 

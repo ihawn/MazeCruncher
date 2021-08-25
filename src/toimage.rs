@@ -4,6 +4,8 @@ use ndarray::Array3;
 //Convert maze matrix to Array3 and write that to an image
 pub fn mtx_to_img(mtx: &Vec<Vec<u8>>, size: usize, name: String)
 {
+    
+    println!("Writing Maze To File");
     let mut array: Array3<u8> = Array3::zeros((size, size, 3));
     
     for j in 0..size
@@ -42,12 +44,8 @@ pub fn mtx_to_img(mtx: &Vec<Vec<u8>>, size: usize, name: String)
         }
     }
 
-    println!("Writing Maze To File");
-    let image = array_to_image(array);
-
-
-  
-    image.save(name);
+    let image = array_to_image(array); 
+    image.save(name).unwrap();
 }
 
 //https://stackoverflow.com/questions/56762026/how-to-save-ndarray-in-rust-as-image

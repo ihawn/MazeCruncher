@@ -12,7 +12,7 @@ fn tremaux(mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_scale:
 {
     //Graphics init
     let buff_size = size*anim_scale;
-    let mut buffer: Vec<u32> = vec![0;  buff_size*buff_size];
+    let mut buffer: Vec<u32> = vec![0;  1];
 
     let mut window = Window::new(
             "Maze!",
@@ -26,6 +26,8 @@ fn tremaux(mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_scale:
 
     if show_animation
     {
+        buffer = vec![0;  buff_size*buff_size];
+
         window = Window::new(
             "Maze!",
             buff_size,
@@ -37,7 +39,7 @@ fn tremaux(mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_scale:
         });
     }
 
-    
+    println!("Got this far");
 
     //Start of solving algo
     let start_x = 1;
@@ -152,20 +154,21 @@ fn traverse_maze(mtx: &Vec<Vec<u8>>, x: usize, y: usize) -> Vec<usize>
 //Returns direction to travel to. 0 = can't travel, 1 = up, 2 = right, 3 = down, 4 = left
 fn check_for_traveled(mtx: &Vec<Vec<u8>>, x: usize, y: usize, can_travel_num: u8) -> usize
 {
-    //look up
-    if mtx[x][y-1] <= can_travel_num
+    //look down
+    if mtx[x][y+1] <= can_travel_num
     {
-        return 1;
+        return 3;
     }
+
     //look right
     else if mtx[x+1][y] <= can_travel_num
     {
         return 2;
     }
-    //look down
-    else if mtx[x][y+1] <= can_travel_num
+    //look up
+    else if mtx[x][y-1] <= can_travel_num
     {
-        return 3;
+        return 1;
     }
     //look left
     else if mtx[x-1][y] <= can_travel_num

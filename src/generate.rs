@@ -92,7 +92,7 @@ fn growing_tree(mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_s
     //print_matrix(&mtx, size);
     if save_maze
     {
-        //toimage::mtx_to_img(&mtx, size, "unsolved.png".to_string());
+        toimage::mtx_to_img(&mtx, size, "unsolved.png".to_string());
     }
 
     println!("Maze Generation Complete");
