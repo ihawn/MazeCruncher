@@ -1,10 +1,11 @@
 use image::RgbImage;
 use ndarray::Array3;
+use ux::u3;
 
 //Convert maze matrix to Array3 and write that to an image
 pub fn mtx_to_img(mtx: &Vec<Vec<u8>>, size: usize, name: String)
 {
-    
+   
     println!("Writing Maze To File");
     let mut array: Array3<u8> = Array3::zeros((size, size, 3));
     
