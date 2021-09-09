@@ -6,8 +6,12 @@ use crate::{solve::solve_maze, toimage};
 
 pub fn generate_maze(mut size: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize, save_maze: bool)
 {
-    size *= 2;
-    size += 1;
+    //Make sure maze has odd size
+    if size % 2 == 0
+    {
+        size += 1;
+    }
+
     let N = size;
     let M = size;    
     let mut m:Vec<Vec<u8>> = vec![vec![2; N]; M];
@@ -16,7 +20,7 @@ pub fn generate_maze(mut size: usize, show_animation: bool, anim_scale: usize, a
     growing_tree(m, size, show_animation, anim_scale, anim_speed_mult, save_maze);
 }
 
-//Growing Tree Algorithm for implementing a "perfect" maze
+//Growing Tree Algorithm for implementing a "perfect" maze i.e. only one solution
 fn growing_tree(mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize, save_maze: bool)
 {
     println!("Generating Maze");

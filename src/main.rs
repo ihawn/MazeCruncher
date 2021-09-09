@@ -24,7 +24,7 @@ fn main()
     if !use_default
     {
         save_maze = read_bool("Save the solved and unsolved maze?\ny/n".to_string());
-        if show_animation
+        if save_maze
         {
             println!("A solution image will be saved to this directory");
         }
