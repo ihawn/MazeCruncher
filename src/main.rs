@@ -4,6 +4,8 @@ use std::io::{stdin, stdout, Read, Write};
 mod generate;
 mod toimage;
 mod solve;
+mod utils;
+mod algo_backtrack;
 
 fn main()
 {
@@ -77,7 +79,7 @@ fn read_int(message: String, default_value: usize) -> usize
         Err(..) => println!("Invalid Input: {}", trimmed),
     };
 
-    return default_value;
+    default_value
 }
 
 fn read_bool(message: String) -> bool
@@ -87,14 +89,14 @@ fn read_bool(message: String) -> bool
     println!("{}", message);
 
     io::stdin().read_line(&mut input).expect("Failed to read");
-    let mut trimmed: String = input.trim().to_string().to_lowercase();
-    return trimmed == "y";
+    let trimmed: String = input.trim().to_string().to_lowercase();
+    trimmed == "y"
 }
 
 fn pause()
 {
     let mut stdout = stdout();
-    stdout.write(b"Press Enter to continue...").unwrap();
+    stdout.write_all(b"Press Enter to continue...").unwrap();
     stdout.flush().unwrap();
-    stdin().read(&mut [0]).unwrap();
+    stdin().read_exact(&mut [0]).unwrap();
 }
