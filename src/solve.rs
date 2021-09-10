@@ -76,7 +76,7 @@ pub fn solve_maze(mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim
 
       
         //Solver
-        let p: (Vec<Vec<u8>>, usize, usize) = crate::algo_tremaux::backtracking(mtx, x, y);
+        let p: (Vec<Vec<u8>>, usize, usize) = crate::algo_tremaux::tremaux(mtx, x, y);
 
         mtx = p.0;
         x = p.1;

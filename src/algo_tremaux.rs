@@ -6,7 +6,7 @@ enum Direction
     Left
 }
 
-pub fn backtracking(mut mtx: Vec<Vec<u8>>, mut x: usize, mut y: usize) -> (Vec<Vec<u8>>, usize, usize)
+pub fn tremaux(mut mtx: Vec<Vec<u8>>, mut x: usize, mut y: usize) -> (Vec<Vec<u8>>, usize, usize)
 {
     mtx[x][y] += 1;
             
