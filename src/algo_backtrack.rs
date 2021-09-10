@@ -60,6 +60,7 @@ fn check_for_traveled(mtx: &[Vec<u8>], x: usize, y: usize, can_travel_num: u8) -
     if mtx[x][y+1] <= can_travel_num
     {
         return Some(Direction::Down);
+    }
     //look right
     if mtx[x+1][y] <= can_travel_num
     {
