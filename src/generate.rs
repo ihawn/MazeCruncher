@@ -1,7 +1,7 @@
 use std::vec;
 use rand::Rng;
 
-use crate::{solve::solve_maze, toimage};
+use crate::{toimage};
 
 
 pub fn generate_maze(mut size: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize, save_maze: bool)
@@ -94,7 +94,7 @@ fn growing_tree(mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_s
     }
 
     println!("Maze Generation Complete");
-    solve_maze(mtx, size, show_animation, anim_scale, anim_speed_mult, save_maze)
+    crate::solve::solve_maze(mtx, size, show_animation, anim_scale, anim_speed_mult, save_maze)
 }
 
 //Function to determine if current cell has any adjacent, non-visited cells

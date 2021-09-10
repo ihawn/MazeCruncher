@@ -5,7 +5,7 @@ mod generate;
 mod toimage;
 mod solve;
 mod utils;
-mod algo_backtrack;
+mod algo_tremaux;
 
 fn main()
 {

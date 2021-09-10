@@ -52,7 +52,6 @@ fn traverse_maze(mtx: &[Vec<u8>], x: usize, y: usize) -> Vec<usize>
 }
 
 
-
 //Returns direction to travel to. 0 = can't travel, 1 = up, 2 = right, 3 = down, 4 = left
 fn check_for_traveled(mtx: &[Vec<u8>], x: usize, y: usize, can_travel_num: u8) -> Option<Direction>
 {

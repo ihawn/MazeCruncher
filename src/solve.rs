@@ -1,12 +1,7 @@
 extern crate minifb;
 use minifb::{Window, WindowOptions};
 
-pub fn solve_maze(mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize, save_maze: bool)
-{
-    tremaux(mtx, size, show_animation, anim_scale, anim_speed_mult, save_maze);
-}
-
-fn tremaux(mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize, save_maze: bool) 
+pub fn solve_maze(mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize, save_maze: bool) 
 {
     //Graphics init
     let buff_size = size*anim_scale;
@@ -81,7 +76,7 @@ fn tremaux(mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_scale:
 
       
         //Solver
-        let p: (Vec<Vec<u8>>, usize, usize) = crate::algo_backtrack::backtracking(mtx, x, y);
+        let p: (Vec<Vec<u8>>, usize, usize) = crate::algo_tremaux::backtracking(mtx, x, y);
 
         mtx = p.0;
         x = p.1;
