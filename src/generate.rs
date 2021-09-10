@@ -103,7 +103,7 @@ fn growing_tree(mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_s
     solve_maze(mtx, size, show_animation, anim_scale, anim_speed_mult, save_maze)
 }
 
-//Convenience function to determine if current cell has any adjacent, non-visited cells
+//Function to determine if current cell has any adjacent, non-visited cells
 fn travel_to(mtx: &Vec<Vec<u8>>, size: usize, x: &usize, y: &usize) -> Vec<i32>
 {
     let mut dirs = vec![1, 2, 3, 4];
@@ -136,7 +136,7 @@ fn travel_to(mtx: &Vec<Vec<u8>>, size: usize, x: &usize, y: &usize) -> Vec<i32>
     return dirs;
 }
 
-//Convenience function to remove value
+//Function to remove value from vector
 fn remove_value(mut values: Vec<i32>, value: i32) -> Vec<i32>
 {
     for i in 0..values.len()

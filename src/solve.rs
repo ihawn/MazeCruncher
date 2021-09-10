@@ -1,5 +1,6 @@
-use std::ptr::null;
+use std::ptr::{NonNull, null};
 use rand::Rng;
+
 extern crate minifb;
 use minifb::{Key, Window, WindowOptions};
 
@@ -121,16 +122,23 @@ fn tremaux(mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_scale:
     }
 }
 
+enum Direction
+{
+    Up,
+    Right,
+    Down,
+    Left
+}
+
 fn traverse_maze(mtx: &Vec<Vec<u8>>, x: usize, y: usize) -> Vec<usize>
 {
     let mut coord = vec![0, 0];
 
     //First check if any untravelled paths remain
-    //0 = not travelled on, 1 = travelled on once, 2 = travelled on twice, u8::MAX = wall
-    let mut trav = check_for_traveled(mtx, x, y, 0); 
+    let mut trav: Option<Direction> = check_for_traveled(mtx, x, y, 0);
     let mut k = 0;
 
-    while trav == 0
+    while trav.is_none()
     {
         k+=1;
         trav = check_for_traveled(mtx, x, y, k); 
@@ -139,10 +147,10 @@ fn traverse_maze(mtx: &Vec<Vec<u8>>, x: usize, y: usize) -> Vec<usize>
 
     match trav
     {
-        1 => coord = vec![x, y-1],
-        2 => coord = vec![x+1,y],
-        3 => coord = vec![x, y+1],
-        4 => coord = vec![x-1, y],
+        Some(Direction::Up) => coord = vec![x, y-1],
+        Some(Direction::Right) => coord = vec![x+1,y],
+        Some(Direction::Down) => coord = vec![x, y+1],
+        Some(Direction::Left) => coord = vec![x-1, y],
 
         _ => println!("Something terrible has happened"),
     }
@@ -151,49 +159,40 @@ fn traverse_maze(mtx: &Vec<Vec<u8>>, x: usize, y: usize) -> Vec<usize>
     return coord;
 }
 
+
+
 //Returns direction to travel to. 0 = can't travel, 1 = up, 2 = right, 3 = down, 4 = left
-fn check_for_traveled(mtx: &Vec<Vec<u8>>, x: usize, y: usize, can_travel_num: u8) -> usize
+fn check_for_traveled(mtx: &Vec<Vec<u8>>, x: usize, y: usize, can_travel_num: u8) -> Option<Direction>
 {
+
+
     //look down
     if mtx[x][y+1] <= can_travel_num
     {
-        return 3;
+        return Some(Direction::Down);
     }
-
     //look right
-    else if mtx[x+1][y] <= can_travel_num
+    if mtx[x+1][y] <= can_travel_num
     {
-        return 2;
+        return Some(Direction::Right);
     }
     //look up
-    else if mtx[x][y-1] <= can_travel_num
+    if mtx[x][y-1] <= can_travel_num
     {
-        return 1;
+        return Some(Direction::Up);
     }
     //look left
-    else if mtx[x-1][y] <= can_travel_num
+    if mtx[x-1][y] <= can_travel_num
     {
-        return 4;
+        return Some(Direction::Left);
     }  
-    else
-    {
-        return 0; 
-    }
-
+    return None;
 }
 
 //Checks if at dead end according to relative_num
 fn is_dead_end(mtx: &Vec<Vec<u8>>, x: usize, y: usize, relative_num: u8) -> bool
 {
-    let t = check_for_traveled(mtx, x, y, relative_num);
-    if t == 0
-    {
-        return true;
-    }
-    else
-    {
-        return false;    
-    }
+    return check_for_traveled(mtx, x, y, relative_num).is_none();
 }
 
 //Reads the color and translates to buffer position and applies color based on matrix value
