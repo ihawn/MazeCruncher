@@ -4,7 +4,7 @@ use rand::Rng;
 use crate::{toimage};
 
 
-pub fn generate_maze(mut size: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize, save_maze: bool)
+pub fn generate_and_solve(mut size: usize, algo: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize, save_maze: bool)
 {
     //Make sure maze has odd size
     if size % 2 == 0
@@ -17,11 +17,11 @@ pub fn generate_maze(mut size: usize, show_animation: bool, anim_scale: usize, a
     let mut m:Vec<Vec<u8>> = vec![vec![2; n]; m];
     m = prime_matrix(m, size);
 
-    growing_tree(m, size, show_animation, anim_scale, anim_speed_mult, save_maze);
+    growing_tree(m, size, algo, show_animation, anim_scale, anim_speed_mult, save_maze);
 }
 
 //Growing Tree Algorithm for implementing a "perfect" maze i.e. only one solution
-fn growing_tree(mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize, save_maze: bool)
+fn growing_tree(mut mtx: Vec<Vec<u8>>, size: usize, algo: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize, save_maze: bool)
 {
     println!("Generating Maze");
     let cell_size = (size - 1)/2;
@@ -94,7 +94,7 @@ fn growing_tree(mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_s
     }
 
     println!("Maze Generation Complete");
-    crate::solve::solve_maze(mtx, size, show_animation, anim_scale, anim_speed_mult, save_maze)
+    crate::solve::solve_maze(mtx, size, algo, show_animation, anim_scale, anim_speed_mult, save_maze)
 }
 
 //Function to determine if current cell has any adjacent, non-visited cells

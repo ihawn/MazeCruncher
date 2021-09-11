@@ -1,3 +1,5 @@
+use minifb::{Window, WindowOptions};
+
 //Reads the color and translates to buffer position and applies color based on matrix value
 pub fn _2d_to_flat_color(mtx: &[Vec<u8>], size: usize, n: usize, b: usize) -> u32
 {
@@ -21,4 +23,52 @@ pub fn _2d_to_flat_color(mtx: &[Vec<u8>], size: usize, n: usize, b: usize) -> u3
         }
     }
     else { black } //wall
+}
+
+//Window buffer update
+pub fn update_buffer(mtx: &Vec<Vec<u8>>, size: usize, mut buffer: Vec<u32>) -> Vec<u32>
+{
+    let mut n: usize = 0;
+    let mut b: usize = 0;
+    for i in buffer.iter_mut() 
+    {
+        *i = _2d_to_flat_color(&mtx, size, n, b);
+   
+        //"unflatten" the buffer vector
+        n+=1;  
+        if n%(size) == 0
+        {
+            n = 0;
+            b += 1;
+        }              
+    }
+
+    buffer
+}
+
+
+pub fn window_init(size: usize) -> Window
+{
+    Window::new(
+        "Maze!",
+        size,
+        size,
+        WindowOptions::default(),
+    )
+    .unwrap_or_else(|e| {
+        panic!("{}", e);
+    })
+}
+
+
+pub fn update_counter(mut max: usize, x: usize, y: usize, size: usize) -> usize
+{
+    let prod = (x+1)*(y+1);
+    if prod > max
+    {
+        max = prod;
+        println!("Solving Maze: {}/{}", prod, size*size);
+    }
+
+    max
 }

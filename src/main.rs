@@ -6,11 +6,12 @@ mod toimage;
 mod solve;
 mod utils;
 mod algo_tremaux;
+mod algo_astar;
 
 fn main()
 {
     println!("----------------------------------------------------");
-    println!("----------------Maze Cruncher v1.0.3----------------");
+    println!("----------------Maze Cruncher v1.1.0----------------");
     println!("----------------------------------------------------");
 
 
@@ -19,12 +20,17 @@ fn main()
     let mut show_animation = true;
     let mut anim_scale = 4;
     let mut anim_speed = 2;
+    let mut algo = 2;
 
 
     let use_default = read_bool("Use default settings?\ny/n: ".to_string());
 
+    
+
     if !use_default
     {
+        algo = read_int("Select algorithm:\n1) Tremaux Backtracking\n2) A*".to_string(), 2);
+
         save_maze = read_bool("Save the solved and unsolved maze?\ny/n".to_string());
         if save_maze
         {
@@ -53,7 +59,7 @@ fn main()
     println!("Initializing");
 
     let before = Instant::now();
-    generate::generate_maze(size, show_animation, anim_scale, anim_speed, save_maze); //Solver is called from within generator
+    generate::generate_and_solve(size, algo, show_animation, anim_scale, anim_speed, save_maze); //Solver is called from within generator
     println!("Elapsed time: {:.2?}", before.elapsed());
 
     println!("Done!");
