@@ -1,7 +1,4 @@
 extern crate minifb;
-use minifb::{Window, WindowOptions};
-
-use crate::utils::update_counter;
 
 #[derive(Copy, Clone)]
 pub struct MazeNode
@@ -11,6 +8,8 @@ pub struct MazeNode
     parent_x: usize,
     parent_y: usize,
     is_wall: bool,
+    open: bool,
+    closed: bool,
     h: usize,
     g: usize,
     f: usize
@@ -40,6 +39,7 @@ pub fn astar(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize,
 
     let mut open_list = Vec::new();
     let mut closed_list= Vec::new();
+    maze[start_x][start_y].open = true;
     open_list.push(maze[start_x][start_y]);
 
     let mut current = open_list[0];
@@ -63,7 +63,9 @@ pub fn astar(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize,
         lowest_loc = find_lowest(&open_list);
         current = open_list[lowest_loc]; //Find node in open list with lowest f
         
-
+        current.closed = true;
+        maze[current.x][current.y].open = false;
+        maze[current.x][current.y].closed = true;
         open_list.remove(lowest_loc); //Remove current from open list and move to closed
         closed_list.push(current);
 
@@ -95,17 +97,24 @@ pub fn astar(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize,
             break 
         }
 
+
+
         //Get children and update lists
         let mut children = get_children(&maze, current); 
+
+
         'inner: for i in 0..children.len()
         {
-            if closed_list.contains(&children[i]) || open_list.contains(&children[i]) { continue 'inner; }
-
+            if  maze[children[i].x][children[i].y].open || children[i].closed { continue 'inner; }
+            
             children[i].g = current.g + 1;
             children[i].f = children[i].g + children[i].h;
 
+            maze[children[i].x][children[i].y].open = true;
             open_list.push(children[i]);
         }
+
+
 
         counter += 1;
         max = crate::utils::update_counter(max, current.x, current.y, size);
@@ -115,7 +124,7 @@ pub fn astar(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize,
 }
 
 //Initialize graph from the maze matrix
-fn graph_init(mut mtx: &Vec<Vec<u8>>, size: usize, end_x: usize, end_y: usize) -> Vec<Vec<MazeNode>>
+fn graph_init(mtx: &Vec<Vec<u8>>, size: usize, end_x: usize, end_y: usize) -> Vec<Vec<MazeNode>>
 {
     let mut maze_graph: Vec<Vec<MazeNode>> = vec!();
     for i in 0..size
@@ -129,6 +138,8 @@ fn graph_init(mut mtx: &Vec<Vec<u8>>, size: usize, end_x: usize, end_y: usize) -
                 parent_x: usize::MAX,
                 parent_y: usize::MAX,
                 is_wall: mtx[i][j] == u8::MAX,
+                open: false,
+                closed: false,
                 h: manhatten(i, end_x, j, end_y) as usize,
                 g: 0,
                 f: 0
@@ -181,7 +192,7 @@ fn get_children(maze: &Vec<Vec<MazeNode>>, node: MazeNode) -> Vec<MazeNode>
 }
 
 
-fn manhatten(x: usize, end_x: usize, y: usize, end_y: usize) -> u8
+fn manhatten(x: usize, end_x: usize, y: usize, end_y: usize) -> u32
 {
-    (end_x-x + end_y-y) as u8
+    (end_x-x + end_y-y) as u32
 }
