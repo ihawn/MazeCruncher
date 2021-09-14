@@ -4,7 +4,7 @@ use rand::Rng;
 use crate::{toimage};
 
 
-pub fn generate_and_solve(mut size: usize, algo: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize, save_maze: bool)
+pub fn generate_and_solve(mut size: usize, algo: usize, decimation: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize, save_maze: bool)
 {
     //Make sure maze has odd size
     if size % 2 == 0
@@ -17,13 +17,14 @@ pub fn generate_and_solve(mut size: usize, algo: usize, show_animation: bool, an
     let mut m:Vec<Vec<u8>> = vec![vec![2; n]; m];
     m = prime_matrix(m, size);
 
-    growing_tree(m, size, algo, show_animation, anim_scale, anim_speed_mult, save_maze);
+    growing_tree(m, size, algo, decimation, show_animation, anim_scale, anim_speed_mult, save_maze);
 }
 
 //Growing Tree Algorithm for implementing a "perfect" maze i.e. only one solution
-fn growing_tree(mut mtx: Vec<Vec<u8>>, size: usize, algo: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize, save_maze: bool)
+fn growing_tree(mut mtx: Vec<Vec<u8>>, size: usize, algo: usize, decimation: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize, save_maze: bool)
 {
     println!("Generating Maze");
+    let factor = decimation;
     let cell_size = (size - 1)/2;
     let mut x = rand::thread_rng().gen_range(0..cell_size)*2 + 1;
     let mut y = rand::thread_rng().gen_range(0..cell_size)*2 + 1;
@@ -86,6 +87,9 @@ fn growing_tree(mut mtx: Vec<Vec<u8>>, size: usize, algo: usize, show_animation:
             }
         }
     }
+
+    //Prevent a perfect maze for decimation factor > 0
+    mtx = decimate_maze(mtx, size, factor);
 
     //print_matrix(&mtx, size);
     if save_maze
@@ -163,3 +167,27 @@ fn prime_matrix(mut mtx: Vec<Vec<u8>>, size: usize) -> Vec<Vec<u8>>
     mtx
 }
 
+
+//Remove walls to allow for multiple solutions
+fn decimate_maze(mut mtx: Vec<Vec<u8>>, size: usize, factor: usize) -> Vec<Vec<u8>>
+{
+    println!("Decimating maze");
+
+    for i in 1..size-1
+    {
+        for j in 1..size-1
+        {
+            //If either side is a wall and the perpendicular neighborhood is a cooridoor (this avoids strange looking corners)
+            if (mtx[i-1][j] == u8::MAX && mtx[i+1][j] == u8::MAX && mtx[i][j-1] != u8::MAX && mtx[i][j+1] != u8::MAX)  || 
+            (mtx[i][j-1] == u8::MAX && mtx[i][j+1] == u8::MAX && mtx[i-1][j] != u8::MAX && mtx[i+1][j] != u8::MAX)
+            {
+                if rand::thread_rng().gen_range(0..100) < factor //Probability of making a wall a coridor
+                {
+                    mtx[i][j] = 0;
+                }
+            }
+        }
+    }
+
+    mtx
+}

@@ -26,13 +26,13 @@ pub fn _2d_to_flat_color(mtx: &[Vec<u8>], size: usize, n: usize, b: usize) -> u3
 }
 
 //Window buffer update
-pub fn update_buffer(mtx: &Vec<Vec<u8>>, size: usize, mut buffer: Vec<u32>) -> Vec<u32>
+pub fn update_buffer(mtx: &[Vec<u8>], size: usize, mut buffer: Vec<u32>) -> Vec<u32>
 {
     let mut n: usize = 0;
     let mut b: usize = 0;
     for i in buffer.iter_mut() 
     {
-        *i = _2d_to_flat_color(&mtx, size, n, b);
+        *i = _2d_to_flat_color(mtx, size, n, b);
    
         //"unflatten" the buffer vector
         n+=1;  

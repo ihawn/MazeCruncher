@@ -20,7 +20,7 @@ impl PartialEq for MazeNode
     fn eq(&self, other: &Self) -> bool { self.x == other.x && self.y == other.y }
 }
 
-pub fn astar(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize, end_x: usize, end_y: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize) -> Vec<Vec<u8>>
+pub fn astar(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize, end_x: usize, end_y: usize, save_maze: bool, show_animation: bool, anim_scale: usize, anim_speed_mult: usize)
 {
     //Graphics init
     let buff_size = size*anim_scale;
@@ -120,11 +120,15 @@ pub fn astar(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize,
         max = crate::utils::update_counter(max, current.x, current.y, size);
     }
 
-    (&mtx).to_vec()
+    println!("Solved");
+    if save_maze
+    {
+        crate::toimage::mtx_to_img(&mtx, size, "solved_astar.png".to_string());
+    }
 }
 
 //Initialize graph from the maze matrix
-fn graph_init(mtx: &Vec<Vec<u8>>, size: usize, end_x: usize, end_y: usize) -> Vec<Vec<MazeNode>>
+fn graph_init(mtx: &[Vec<u8>], size: usize, end_x: usize, end_y: usize) -> Vec<Vec<MazeNode>>
 {
     let mut maze_graph: Vec<Vec<MazeNode>> = vec!();
     for i in 0..size
@@ -151,7 +155,7 @@ fn graph_init(mtx: &Vec<Vec<u8>>, size: usize, end_x: usize, end_y: usize) -> Ve
     maze_graph
 }
 
-fn find_lowest(lst: &Vec<MazeNode>) -> usize
+fn find_lowest(lst: &[MazeNode]) -> usize
 {
     let mut min_loc: usize = 0;
     let mut min_val = lst[0].f;
@@ -169,7 +173,7 @@ fn find_lowest(lst: &Vec<MazeNode>) -> usize
     min_loc
 }
 
-fn get_children(maze: &Vec<Vec<MazeNode>>, node: MazeNode) -> Vec<MazeNode>
+fn get_children(maze: &[Vec<MazeNode>], node: MazeNode) -> Vec<MazeNode>
 {
     let x = node.x;
     let y = node.y;
@@ -192,7 +196,7 @@ fn get_children(maze: &Vec<Vec<MazeNode>>, node: MazeNode) -> Vec<MazeNode>
 }
 
 
-fn manhatten(x: usize, end_x: usize, y: usize, end_y: usize) -> u32
+pub fn manhatten(x: usize, end_x: usize, y: usize, end_y: usize) -> u32
 {
     (end_x-x + end_y-y) as u32
 }

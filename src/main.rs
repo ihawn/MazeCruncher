@@ -10,9 +10,15 @@ mod algo_astar;
 
 fn main()
 {
-    println!("----------------------------------------------------");
-    println!("----------------Maze Cruncher v1.1.1----------------");
-    println!("----------------------------------------------------");
+
+    println!(r"
+ __  __                 _____                       _               _ 
+|  \/  |               /  __ \                     | |             | |
+| .  . | __ _ _______  | /  \/_ __ _   _ _ __   ___| |__   ___ _ __| |
+| |\/| |/ _` |_  / _ \ | |   | '__| | | | '_ \ / __| '_ \ / _ \ '__| |
+| |  | | (_| |/ /  __/ | \__/\ |  | |_| | | | | (__| | | |  __/ |  |_|
+\_|  |_/\__,_/___\___|  \____/_|   \__,_|_| |_|\___|_| |_|\___|_|  (_)                                                                
+");
 
 
     let mut size: usize = 75;
@@ -21,32 +27,33 @@ fn main()
     let mut anim_scale = 4;
     let mut anim_speed = 2;
     let mut algo = 2;
+    let mut decimation = 0;
 
 
-    let use_default = read_bool("Use default settings?\ny/n: ".to_string());
+    let use_default = read_bool("Use default settings?".to_string(), "y/n: ".to_string());
 
     
 
     if !use_default
     {
-        algo = read_int("Select algorithm:\n1) Tremaux Backtracking\n2) A*".to_string(), 2);
-
-        save_maze = read_bool("Save the solved and unsolved maze?\ny/n".to_string());
+        algo = read_int("Select algorithm:".to_string(), "1) Tremaux Backtracking\n2) A*\n3) All of them!".to_string(), 2);
+        decimation = read_int("Select maze decimation probability (0 = perfect maze)".to_string(), "0-100: ".to_string(), 2);
+        save_maze = read_bool("Save the solved and unsolved maze?".to_string(), "y/n: ".to_string());
         if save_maze
         {
             println!("A solution image will be saved to this directory");
         }
-        size = read_int("Enter a maze size: ".to_string(), size);
+        size = read_int("Enter a maze size: ".to_string(), "".to_string(), size);
         
 
         if size <= 2048
         {
-            show_animation = read_bool("Do you want to display the solution animation? (takes longer but looks cool)\ny/n".to_string());
+            show_animation = read_bool("Do you want to display the solution animation? (takes longer but looks cool)".to_string(), "y/n: ".to_string());
 
             if show_animation
             {
-                anim_scale = read_int("Enter animation scale: ".to_string(), anim_scale);
-                anim_speed = read_int("Enter animation speed: ".to_string(), anim_speed);
+                anim_scale = read_int("Enter animation scale: ".to_string(), "".to_string(), anim_scale);
+                anim_speed = read_int("Enter animation speed: ".to_string(), "".to_string(), anim_speed);
             }
         }
         else 
@@ -59,7 +66,7 @@ fn main()
     println!("Initializing");
 
     let before = Instant::now();
-    generate::generate_and_solve(size, algo, show_animation, anim_scale, anim_speed, save_maze); //Solver is called from within generator
+    generate::generate_and_solve(size, algo, decimation, show_animation, anim_scale, anim_speed, save_maze); //Solver is called from within generator
     println!("Elapsed time: {:.2?}", before.elapsed());
 
     println!("Done!");
@@ -71,12 +78,13 @@ fn main()
     pause();
 }
 
-fn read_int(message: String, default_value: usize) -> usize
+fn read_int(message: String, choices: String, default_value: usize) -> usize
 {
     
     let mut input = String::new();
     println!();
     println!("{}", message);
+    println!("{}", choices);
 
     io::stdin().read_line(&mut input).expect("Failed to read");
     let trimmed = input.trim().to_string();
@@ -88,11 +96,12 @@ fn read_int(message: String, default_value: usize) -> usize
     default_value
 }
 
-fn read_bool(message: String) -> bool
+fn read_bool(message: String, choices: String) -> bool
 {
     let mut input = String::new();
     println!();
     println!("{}", message);
+    println!("{}", choices);
 
     io::stdin().read_line(&mut input).expect("Failed to read");
     let trimmed: String = input.trim().to_string().to_lowercase();

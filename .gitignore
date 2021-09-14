@@ -5,6 +5,8 @@
 /target/release/.cargo-lock
 solved.png
 unsolved.png
+solved_astar.png
+solved_tremaux.png
 *.json
 *.d
 *.pdb
