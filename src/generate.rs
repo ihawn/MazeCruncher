@@ -171,7 +171,7 @@ fn prime_matrix(mut mtx: Vec<Vec<u8>>, size: usize) -> Vec<Vec<u8>>
 //Remove walls to allow for multiple solutions
 fn decimate_maze(mut mtx: Vec<Vec<u8>>, size: usize, factor: usize) -> Vec<Vec<u8>>
 {
-    println!("Decimating maze");
+    println!("Decimating Maze");
 
     for i in 1..size-1
     {

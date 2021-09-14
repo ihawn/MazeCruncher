@@ -61,6 +61,8 @@ pub fn astar(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize,
         }
 
         lowest_loc = find_lowest(&open_list);
+        let mut min_loc: usize = 0;
+    
         current = open_list[lowest_loc]; //Find node in open list with lowest f
         
         current.closed = true;
