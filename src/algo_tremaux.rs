@@ -1,9 +1,4 @@
-#[derive(Copy, Clone)]
-struct LightNode
-{
-    parent_x: usize,
-    parent_y: usize
-}
+use rand::Rng;
 
 pub fn tremaux(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize, end_x: usize, end_y: usize, save_maze: bool, show_animation: bool, anim_scale: usize, anim_speed_mult: usize)
 {
@@ -11,12 +6,12 @@ pub fn tremaux(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usiz
     let buff_size = size*anim_scale;
     let mut buffer: Vec<u32> = vec![0;  1];
 
-    let mut window = crate::utils::window_init(0);
+    let mut window = crate::utils::window_init(0, "Tremaux");
 
     if show_animation
     {
         buffer = vec![0;  buff_size*buff_size];
-        window = crate::utils::window_init(buff_size);
+        window = crate::utils::window_init(buff_size, "Tremaux");
     }
 
     //Algo init
@@ -24,7 +19,7 @@ pub fn tremaux(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usiz
     let mut y = start_y;
 
     let mut max = 0;
-    let mut maze = graph_init(size);
+    let mut maze = crate::algo_dfs::graph_init(size);
 
     let mut counter: u128 = 0;
     loop
@@ -39,7 +34,7 @@ pub fn tremaux(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usiz
         }
 
         mtx[x][y] += 1;
-        let trav: Option<crate::solve::Direction> = check_for_traveled(&mtx, x, y, end_x, end_y, 0); //Get travel direction
+        let trav: Option<crate::solve::Direction> = trav_rand(&mtx, x, y, 0); //Get travel direction
 
         let mut v: Vec<usize> = vec!();
         match trav //Travel based on direction. Set parent 
@@ -52,7 +47,7 @@ pub fn tremaux(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usiz
         }
 
         //Add 1 to dead ends (since we only hit them once but they need to have a value of 2)
-        if is_dead_end(&mtx, x, y, end_x, end_y, 0)
+        if is_dead_end(&mtx, x, y, 0)
         {
             mtx[x][y] += 1;
         }
@@ -74,51 +69,32 @@ pub fn tremaux(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usiz
 }
 
 //Returns direction to travel to. 0 = can't travel, 1 = up, 2 = right, 3 = down, 4 = left
-fn check_for_traveled(mtx: &[Vec<u8>], x: usize, y: usize, end_x: usize, end_y: usize, can_travel_num: u8) -> Option<crate::solve::Direction>
+fn trav_rand(mtx: &[Vec<u8>], x: usize, y: usize, can_travel_num: u8) -> Option<crate::solve::Direction>
 {
-    let cx = vec!(x, x-1, x, x+1);
-    let cy = vec!(y-1, y, y+1, y);
-    let v = vec!(mtx[x][y-1], mtx[x-1][y], mtx[x][y+1], mtx[x+1][y]);
-    let d = vec!(crate::solve::Direction::Up, crate::solve::Direction::Left, crate::solve::Direction::Down, crate::solve::Direction::Right);
+    let mut v = vec!(mtx[x][y-1], mtx[x-1][y], mtx[x][y+1], mtx[x+1][y]);
+    let mut d = vec!(crate::solve::Direction::Up, crate::solve::Direction::Left, crate::solve::Direction::Down, crate::solve::Direction::Right);
 
-    let mut min_val = u32::MAX;
-    let mut min_loc = 4;
-    for i in 0..v.len() //Loop through possible directions
+    let mut s = v.len();
+    for _i in 0..v.len() //Loop through possible directions
     {
-        let man = crate::algo_astar::manhatten(cx[i], end_x, cy[i], end_y);
-        if v[i] <= can_travel_num && man < min_val //Determine if route can be traveled on and find closest one to the end
+        //Randomize route
+        let n = rand::thread_rng().gen_range(0..s);
+        if v[n] > can_travel_num //Determine if route can be traveled on and find closest one to the end
         {
-            min_val = man;
-            min_loc = i;
+            v.remove(n);
+            d.remove(n);
+            s-=1;
+        }
+        else 
+        {
+            return Some(d[n]);
         }
     }
-
-    if min_loc != 4 { return Some(d[min_loc]) }
-
     None
 }
 
 //Checks if at dead end according to relative_num
-fn is_dead_end(mtx: &[Vec<u8>], x: usize, y: usize, end_x: usize, end_y: usize, relative_num: u8) -> bool
+fn is_dead_end(mtx: &[Vec<u8>], x: usize, y: usize, relative_num: u8) -> bool
 {
-    check_for_traveled(mtx, x, y, end_x, end_y, relative_num).is_none()
+    trav_rand(mtx, x, y, relative_num).is_none()
 }
-
-//Copy the maze matrix into graph form so we can save each cell's parent
-fn graph_init(size: usize) -> Vec<Vec<LightNode>> 
-{
-    let mut maze_graph: Vec<Vec<LightNode>> = vec!();
-    for _i in 0..size
-    {
-        let mut maze_row: Vec<LightNode> = vec!();
-        for _j in 0..size
-        {
-            maze_row.push(LightNode{parent_x: 0, parent_y: 0});
-        }
-        maze_graph.push(maze_row);
-    }
-
-    maze_graph
-}
-
-

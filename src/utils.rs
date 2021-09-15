@@ -47,10 +47,10 @@ pub fn update_buffer(mtx: &[Vec<u8>], size: usize, mut buffer: Vec<u32>) -> Vec<
 }
 
 
-pub fn window_init(size: usize) -> Window
+pub fn window_init(size: usize, label: &str) -> Window
 {
     Window::new(
-        "Maze!",
+        label,
         size,
         size,
         WindowOptions::default(),
@@ -64,7 +64,7 @@ pub fn window_init(size: usize) -> Window
 pub fn update_counter(mut max: usize, x: usize, y: usize, size: usize) -> usize
 {
     let prod = (x+1)*(y+1);
-    if prod > max
+    if prod > max + size
     {
         max = prod;
         println!("Solving Maze: {}/{}", prod, size*size);

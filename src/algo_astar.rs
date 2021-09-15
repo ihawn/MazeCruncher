@@ -1,24 +1,6 @@
 extern crate minifb;
+use std::{cmp::Ordering, collections::BinaryHeap};
 
-#[derive(Copy, Clone)]
-pub struct MazeNode
-{
-    x: usize,
-    y: usize,
-    parent_x: usize,
-    parent_y: usize,
-    is_wall: bool,
-    open: bool,
-    closed: bool,
-    h: usize,
-    g: usize,
-    f: usize
-}
-
-impl PartialEq for MazeNode
-{
-    fn eq(&self, other: &Self) -> bool { self.x == other.x && self.y == other.y }
-}
 
 pub fn astar(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize, end_x: usize, end_y: usize, save_maze: bool, show_animation: bool, anim_scale: usize, anim_speed_mult: usize)
 {
@@ -26,30 +8,29 @@ pub fn astar(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize,
     let buff_size = size*anim_scale;
     let mut buffer: Vec<u32> = vec![0;  1];
 
-    let mut window = crate::utils::window_init(0);
+    let mut window = crate::utils::window_init(0, "A*");
 
     if show_animation
     {
         buffer = vec![0;  buff_size*buff_size];
-        window = crate::utils::window_init(buff_size);
+        window = crate::utils::window_init(buff_size, "A*");
     }
 
     //Algo init
     let mut maze = graph_init(&mtx, size, end_x, end_y);
 
-    let mut open_list = Vec::new();
-    let mut closed_list= Vec::new();
+    let mut open_heap: BinaryHeap<MazeNode> = BinaryHeap::new();
     maze[start_x][start_y].open = true;
-    open_list.push(maze[start_x][start_y]);
+    open_heap.push(maze[start_x][start_y]);
 
-    let mut current = open_list[0];
+    //let mut current = open_list[0];
+    let mut current: MazeNode = maze[start_x][start_y];
     let end_node = maze[end_x][end_y];
-    let mut lowest_loc: usize = 0;
 
     let mut max = 0;
 
     let mut counter: u128 = 0;
-    while !open_list.is_empty()
+    while !open_heap.is_empty()
     {
         //update window
         if show_animation && counter % anim_speed_mult as u128 == 0
@@ -60,16 +41,10 @@ pub fn astar(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize,
             .unwrap();
         }
 
-        lowest_loc = find_lowest(&open_list);
-        let mut min_loc: usize = 0;
-    
-        current = open_list[lowest_loc]; //Find node in open list with lowest f
-        
+        current = open_heap.pop().unwrap(); //Get node with lowest f
         current.closed = true;
+        
         maze[current.x][current.y].open = false;
-        maze[current.x][current.y].closed = true;
-        open_list.remove(lowest_loc); //Remove current from open list and move to closed
-        closed_list.push(current);
 
 
         mtx[current.x][current.y] = 2;
@@ -99,11 +74,8 @@ pub fn astar(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize,
             break 
         }
 
-
-
         //Get children and update lists
         let mut children = get_children(&maze, current); 
-
 
         'inner: for i in 0..children.len()
         {
@@ -113,10 +85,8 @@ pub fn astar(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize,
             children[i].f = children[i].g + children[i].h;
 
             maze[children[i].x][children[i].y].open = true;
-            open_list.push(children[i]);
+            open_heap.push(children[i]);
         }
-
-
 
         counter += 1;
         max = crate::utils::update_counter(max, current.x, current.y, size);
@@ -157,24 +127,6 @@ fn graph_init(mtx: &[Vec<u8>], size: usize, end_x: usize, end_y: usize) -> Vec<V
     maze_graph
 }
 
-fn find_lowest(lst: &[MazeNode]) -> usize
-{
-    let mut min_loc: usize = 0;
-    let mut min_val = lst[0].f;
-    
-
-    for i in 1..lst.len()
-    {
-        if lst[i].f < min_val
-        {
-            min_val = lst[i].f;
-            min_loc = i;
-        }
-    }
-
-    min_loc
-}
-
 fn get_children(maze: &[Vec<MazeNode>], node: MazeNode) -> Vec<MazeNode>
 {
     let x = node.x;
@@ -197,8 +149,48 @@ fn get_children(maze: &[Vec<MazeNode>], node: MazeNode) -> Vec<MazeNode>
     children
 }
 
-
 pub fn manhatten(x: usize, end_x: usize, y: usize, end_y: usize) -> u32
 {
     (end_x-x + end_y-y) as u32
+}
+
+
+
+//Struct to store maze node
+#[derive(Copy, Clone)]
+pub struct MazeNode
+{
+    x: usize,
+    y: usize,
+    parent_x: usize,
+    parent_y: usize,
+    is_wall: bool,
+    open: bool,
+    closed: bool,
+    h: usize,
+    g: usize,
+    f: usize
+}
+
+impl PartialEq for MazeNode
+{
+    fn eq(&self, other: &Self) -> bool { self.x == other.x && self.y == other.y }
+}
+
+impl PartialOrd for MazeNode
+{
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering>
+    {
+        Some(self.cmp(other))
+    }
+}
+
+impl Eq for MazeNode {}
+
+impl Ord for MazeNode
+{
+    fn cmp(&self, other: &Self) -> Ordering
+    {
+        self.f.cmp(&other.f).reverse()
+    }
 }

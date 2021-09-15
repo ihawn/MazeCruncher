@@ -5,8 +5,9 @@ mod generate;
 mod toimage;
 mod solve;
 mod utils;
-mod algo_tremaux;
+mod algo_dfs;
 mod algo_astar;
+mod algo_tremaux;
 
 fn main()
 {
@@ -21,11 +22,11 @@ fn main()
 ");
 
 
-    let mut size: usize = 75;
+    let mut size: usize = 200;
     let mut save_maze = true;
     let mut show_animation = true;
     let mut anim_scale = 4;
-    let mut anim_speed = 2;
+    let mut anim_speed = 10;
     let mut algo = 2;
     let mut decimation = 0;
 
@@ -36,7 +37,7 @@ fn main()
 
     if !use_default
     {
-        algo = read_int("Select algorithm:".to_string(), "1) Tremaux Backtracking\n2) A*\n3) All of them!".to_string(), 2);
+        algo = read_int("Select algorithm:".to_string(), "1) Depth First Search\n2) A*\n3) Tremaux\n4) All of them!".to_string(), 2);
         decimation = read_int("Select maze decimation probability (0 = perfect maze)".to_string(), "0-100: ".to_string(), 2);
         save_maze = read_bool("Save the solved and unsolved maze?".to_string(), "y/n: ".to_string());
         if save_maze
