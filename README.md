@@ -26,4 +26,4 @@ Welcome to maze cruncher!
 
 ## A maze generated and solved using Depth First Search with size = 1024:
 
-![alt text](https://github.com/ihawn/MazeCruncher/1024.png)
+![alt text](https://github.com/ihawn/MazeCruncher/blob/main/1024.png)
