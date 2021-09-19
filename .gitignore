@@ -1,12 +1,10 @@
-/target/debug
-/target/release/.fingerprint
-/target/release/build
-/target/release/deps
-/target/release/.cargo-lock
+/target
 solved.png
 unsolved.png
 solved_astar.png
 solved_tremaux.png
+solved_dfs.png
+solved_dijkstra.png
 *.json
 *.d
 *.pdb
