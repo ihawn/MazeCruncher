@@ -1,7 +1,7 @@
 # MazeCruncher
 Welcome to maze cruncher!
 
-<a href="https://github.com/ihawn/MazeCruncher/blob/main/target/release/MazeCruncher.exe">Download Standalone Here</a>
+<a href="https://github.com/ihawn/MazeCruncher/releases/tag/MazeCruncher">Download Here</a>
 
 ## Usage
 * To get started, just run the standalone .exe in target/release or compile and run the source code yourself.
