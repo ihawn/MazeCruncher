@@ -10,7 +10,13 @@ Welcome to maze cruncher!
 
 ## Settings
 
-* **Maze Size:** The size of the maze. Large values (>10,000) will take awhile and really large values (>50,000) can use more than 64 GB of memory. Also keep in mind that the solved and unsolved maze image will be saved with dimension n x n
+* **Algorithm:** Currently functional are Depth First Search, Dijkstra, A*, and Tremaux.
+
+* **Maze Decimation Probability:** Setting this to zero will ensure the maze has only one solution. Setting this to anything greater than zero will increase the probability of more paths.
+
+* **Save Maze:** Responding yes will save the solved and unsolved maze to the same directory as the executable.
+
+* **Maze Size:** The size of the maze. Large values (>10,000) will take awhile and really large values (>50,000) can use more than 64 GB of memory. Also keep in mind that the solved and unsolved maze image will be saved with dimension n x n.
 
 * **Show Animation:** Whether or not to show the animation of the algorithm solving the maze. It looks cool but takes way longer than just letting it run. Automatically disabled for mazes with size >2048.
 
