@@ -1,4 +1,5 @@
 use minifb::{Window, WindowOptions};
+use std::cmp::Ordering;
 
 //Reads the color and translates to buffer position and applies color based on matrix value
 pub fn _2d_to_flat_color(mtx: &[Vec<u8>], size: usize, n: usize, b: usize) -> u32
@@ -64,11 +65,14 @@ pub fn window_init(size: usize, label: &str) -> Window
 pub fn update_counter(mut max: usize, x: usize, y: usize, size: usize) -> usize
 {
     let prod = (x+1)*(y+1);
-    if prod > max + size
+    let m = 100*prod/(size*size);
+    if m > max
     {
-        max = prod;
-        println!("Solving Maze: {}/{}", prod, size*size);
+        max = m;
+        println!("Solving Maze: {}%", m);
     }
 
     max
 }
+
+
