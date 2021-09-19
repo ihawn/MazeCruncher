@@ -62,14 +62,14 @@ pub fn window_init(size: usize, label: &str) -> Window
 }
 
 
-pub fn update_counter(mut max: usize, x: usize, y: usize, size: usize) -> usize
+pub fn update_counter(mut max: usize, x: usize, y: usize, size: usize, name: &str) -> usize
 {
     let prod = (x+1)*(y+1);
     let m = 100*prod/(size*size);
     if m > max
     {
         max = m;
-        println!("Solving Maze: {}%", m);
+        println!("Solving Maze with {}: {}%", name, m);
     }
 
     max

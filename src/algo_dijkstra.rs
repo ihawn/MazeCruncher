@@ -8,12 +8,12 @@ pub fn dijkstra(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usi
     let buff_size = size*anim_scale;
     let mut buffer: Vec<u32> = vec![0;  1];
 
-    let mut window = crate::utils::window_init(0, "A*");
+    let mut window = crate::utils::window_init(0, "Dijkstra");
 
     if show_animation
     {
         buffer = vec![0;  buff_size*buff_size];
-        window = crate::utils::window_init(buff_size, "A*");
+        window = crate::utils::window_init(buff_size, "Dijkstra");
     }
 
     //Algo init
@@ -92,7 +92,7 @@ pub fn dijkstra(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usi
         }
 
         counter += 1;
-        max = crate::utils::update_counter(max, current.x, current.y, size);
+        max = crate::utils::update_counter(max, current.x, current.y, size, "Dijkstra");
     }
 
     println!("Solved");
@@ -144,7 +144,6 @@ fn graph_init(mtx: &[Vec<u8>], size: usize) -> Vec<Vec<DNode>>
         }
         maze_graph.push(maze_row);
     }
-
     maze_graph
 }
 

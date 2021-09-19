@@ -55,7 +55,7 @@ pub fn tremaux(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usiz
         x = v[0];
         y = v[1];
 
-        max = crate::utils::update_counter(max, x, y, size);
+        max = crate::utils::update_counter(max, x, y, size, "Tremaux");
 
         if x == end_x && y == end_y { break; }
  

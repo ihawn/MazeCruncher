@@ -60,7 +60,7 @@ pub fn dfs(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize, e
         x = v[0];
         y = v[1];
 
-        max = crate::utils::update_counter(max, x, y, size);
+        max = crate::utils::update_counter(max, x, y, size, "Depth First Search");
 
         if x == end_x && y == end_y { break; }
  

@@ -89,7 +89,7 @@ pub fn astar(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize,
         }
 
         counter += 1;
-        max = crate::utils::update_counter(max, current.x, current.y, size);
+        max = crate::utils::update_counter(max, current.x, current.y, size, "A*");
     }
 
     println!("Solved");
@@ -132,7 +132,7 @@ fn get_children(maze: &[Vec<MazeNode>], node: MazeNode) -> Vec<MazeNode>
     let x = node.x;
     let y = node.y;
     let mut children: Vec<MazeNode> = vec!();
-    
+
     if x < maze[0].len()-1 && !maze[x+1][y].is_wall { children.push(maze[x+1][y]); }
     if x > 0 && !maze[x-1][y].is_wall { children.push(maze[x-1][y]); }
     if y < maze[0].len()-1 && !maze[x][y+1].is_wall { children.push(maze[x][y+1]); }
