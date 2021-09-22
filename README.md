@@ -4,8 +4,9 @@ Welcome to maze cruncher!
 <a href="https://github.com/ihawn/MazeCruncher/releases/tag/MazeCruncher">Download Here</a>
 
 ## Usage
-* To get started, just run the standalone .exe in target/release or compile and run the source code yourself.
+* To get started, just run the standalone .exe or compile and run the source code yourself.
 * Both the solved and unsolved mazes are saved as a png in the directory that the .exe is run from.
+* A solution animation can be displayed too but it will slow the algorithm considerably, though it looks very interesting.
 * The algorithm considers the maze solved when it has gone from the upper left corner to the lower right corner. 
 
 ## Settings
