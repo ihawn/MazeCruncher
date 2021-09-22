@@ -181,7 +181,7 @@ fn decimate_maze(mut mtx: Vec<Vec<u8>>, size: usize, factor: usize) -> Vec<Vec<u
             if (mtx[i-1][j] == u8::MAX && mtx[i+1][j] == u8::MAX && mtx[i][j-1] != u8::MAX && mtx[i][j+1] != u8::MAX)  || 
             (mtx[i][j-1] == u8::MAX && mtx[i][j+1] == u8::MAX && mtx[i-1][j] != u8::MAX && mtx[i+1][j] != u8::MAX)
             {
-                if rand::thread_rng().gen_range(0..100) < factor //Probability of making a wall a coridor
+                if rand::thread_rng().gen_range(0..100) < factor && rand::thread_rng().gen_range(0..100) < factor //Probability of making a wall a coridor
                 {
                     mtx[i][j] = 0;
                 }

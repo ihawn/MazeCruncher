@@ -85,7 +85,7 @@ fn check_for_traveled(mtx: &[Vec<u8>], x: usize, y: usize, end_x: usize, end_y: 
     let mut min_loc = 4;
     for i in 0..v.len() //Loop through possible directions
     {
-        let man = crate::algo_astar::manhatten(cx[i], end_x, cy[i], end_y);
+        let man = crate::utils::euclidean(cx[i], end_x, cy[i], end_y) as u32;
         if v[i] <= can_travel_num && man < min_val //Determine if route can be traveled on and find closest one to the end
         {
             min_val = man;

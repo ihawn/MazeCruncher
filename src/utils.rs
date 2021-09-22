@@ -48,6 +48,17 @@ pub fn update_buffer(mtx: &[Vec<u8>], size: usize, mut buffer: Vec<u32>) -> Vec<
 }
 
 
+//heuristic distance functions
+pub fn manhatten(x: usize, end_x: usize, y: usize, end_y: usize) -> u32
+{
+    (end_x-x + end_y-y) as u32
+}
+pub fn euclidean(x: usize, end_x: usize, y: usize, end_y: usize) -> usize
+{
+    usize::pow(end_x - x, 2) + usize::pow(end_y - y, 2)
+}
+
+
 pub fn window_init(size: usize, label: &str) -> Window
 {
     Window::new(

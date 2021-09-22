@@ -1,5 +1,5 @@
 extern crate minifb;
-use std::{cmp::Ordering, collections::BinaryHeap};
+use std::{cmp::Ordering, collections::BinaryHeap, };
 
 
 pub fn astar(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize, end_x: usize, end_y: usize, save_maze: bool, show_animation: bool, anim_scale: usize, anim_speed_mult: usize)
@@ -116,7 +116,7 @@ fn graph_init(mtx: &[Vec<u8>], size: usize, end_x: usize, end_y: usize) -> Vec<V
                 is_wall: mtx[i][j] == u8::MAX,
                 open: false,
                 closed: false,
-                h: manhatten(i, end_x, j, end_y) as usize,
+                h: crate::utils::euclidean(i, end_x, j, end_y) as usize,
                 g: usize::MAX,
                 f: 0
             });
@@ -147,10 +147,7 @@ fn get_children(maze: &[Vec<MazeNode>], node: MazeNode) -> Vec<MazeNode>
     children
 }
 
-pub fn manhatten(x: usize, end_x: usize, y: usize, end_y: usize) -> u32
-{
-    (end_x-x + end_y-y) as u32
-}
+
 
 
 //Struct to store maze node

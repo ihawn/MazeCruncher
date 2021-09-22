@@ -9,6 +9,7 @@ mod algo_dfs;
 mod algo_astar;
 mod algo_tremaux;
 mod algo_dijkstra;
+mod algo_bfs;
 
 fn main()
 {
@@ -38,7 +39,7 @@ fn main()
 
     if !use_default
     {
-        algo = read_int("Select algorithm:".to_string(), "1) Depth First Search\n2) Dijkstra\n3) A*\n4) Tremaux\n5) All of them!".to_string(), 2);
+        algo = read_int("Select algorithm:".to_string(), "1) Depth First Search\n2) Breadth First Search\n3) A*\n4) Tremaux\n5) Dijkstra\n6) All of them!".to_string(), 2);
         decimation = read_int("Select maze decimation probability (0 = perfect maze)".to_string(), "0-100: ".to_string(), 2);
         save_maze = read_bool("Save the solved and unsolved maze?".to_string(), "y/n: ".to_string());
         if save_maze

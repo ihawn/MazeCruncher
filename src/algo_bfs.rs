@@ -1,37 +1,37 @@
 extern crate minifb;
-use std::{cmp::Ordering, collections::BinaryHeap};
+extern crate queues;
+use queues::*;
 
 
-pub fn dijkstra(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize, end_x: usize, end_y: usize, save_maze: bool, show_animation: bool, anim_scale: usize, anim_speed_mult: usize)
+pub fn bfs(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize, end_x: usize, end_y: usize, save_maze: bool, show_animation: bool, anim_scale: usize, anim_speed_mult: usize)
 {
     //Graphics init
     let buff_size = size*anim_scale;
     let mut buffer: Vec<u32> = vec![0;  1];
 
-    let mut window = crate::utils::window_init(0, "Dijkstra");
+    let mut window = crate::utils::window_init(0, "Breadth First Search");
 
     if show_animation
     {
         buffer = vec![0;  buff_size*buff_size];
-        window = crate::utils::window_init(buff_size, "Dijkstra");
+        window = crate::utils::window_init(buff_size, "Breadth First Search");
     }
 
     //Algo init
     let mut maze = graph_init(&mtx, size);
-    let mut node_heap: BinaryHeap<DNode> = BinaryHeap::new();
-    maze[start_x][start_y].dist = 0;
+    let mut node_queue: Queue<BNode> = queue![];
+    node_queue.add(maze[start_x][start_y]);
 
-    node_heap.push(maze[start_x][start_y]);
     
     let end_node = maze[end_x][end_y];
     let mut max = 0; //For the counter
 
 
     let mut counter: u128 = 0;
-    while !node_heap.is_empty()
+    while node_queue.size() > 0
     {
         //update window
-        if show_animation && counter % (anim_speed_mult*2) as u128 == 0
+        if show_animation && counter % (anim_speed_mult*5) as u128 == 0
         {
             buffer = crate::utils::update_buffer(&mtx, size, buffer);
             window
@@ -39,8 +39,7 @@ pub fn dijkstra(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usi
             .unwrap();
         }
 
-        //Get lowest in heap
-        let mut current = node_heap.pop().unwrap();
+        let mut current: BNode = node_queue.remove().unwrap();
         mtx[current.x][current.y] = 2;
         
         //Get adjacent cells
@@ -51,19 +50,13 @@ pub fn dijkstra(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usi
         {
             if mtx[c.x][c.y] != 2
             {
-                let temp_dist = current.dist + 1;
+                maze[c.x][c.y].parent_x = current.x;
+                maze[c.x][c.y].parent_y = current.y;
 
-                if temp_dist < c.dist
-                {
-                    maze[c.x][c.y].dist = temp_dist;
-                    maze[c.x][c.y].parent_x = current.x;
-                    maze[c.x][c.y].parent_y = current.y;
-                    c.dist = temp_dist;
-                    c.parent_x = current.x;
-                    c.parent_y = current.y;
+                c.parent_x = current.x;
+                c.parent_y = current.y;
 
-                    node_heap.push(c);
-                }
+                node_queue.add(c);
             }
         }
 
@@ -92,22 +85,22 @@ pub fn dijkstra(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usi
         }
 
         counter += 1;
-        max = crate::utils::update_counter(max, current.x, current.y, size, "Dijkstra");
+        max = crate::utils::update_counter(max, current.x, current.y, size, "Breadth First Search");
     }
 
     println!("Solved");
     if save_maze
     {
-        crate::toimage::mtx_to_img(&mtx, size, "solved_dijkstra.png".to_string());
+        crate::toimage::mtx_to_img(&mtx, size, "solved_bfs.png".to_string());
     }
 }
 
 //Get adjacent nodes
-fn get_children(maze: &[Vec<DNode>], node: DNode) -> Vec<DNode>
+fn get_children(maze: &[Vec<BNode>], node: BNode) -> Vec<BNode>
 {
     let x = node.x;
     let y = node.y;
-    let mut children: Vec<DNode> = vec!();
+    let mut children: Vec<BNode> = vec!();
 
     if x < maze[0].len()-1 && !maze[x+1][y].is_wall { children.push(maze[x+1][y]); }
     if x > 0 && !maze[x-1][y].is_wall { children.push(maze[x-1][y]); }
@@ -124,21 +117,20 @@ fn get_children(maze: &[Vec<DNode>], node: DNode) -> Vec<DNode>
 }
 
 //Initialize graph from the maze matrix
-fn graph_init(mtx: &[Vec<u8>], size: usize) -> Vec<Vec<DNode>>
+fn graph_init(mtx: &[Vec<u8>], size: usize) -> Vec<Vec<BNode>>
 {
-    let mut maze_graph: Vec<Vec<DNode>> = vec!();
+    let mut maze_graph: Vec<Vec<BNode>> = vec!();
     for i in 0..size
     {
-        let mut maze_row: Vec<DNode> = vec!();
+        let mut maze_row: Vec<BNode> = vec!();
         for j in 0..size
         {
-            let node = DNode{
+            let node = BNode{
                 x: i,
                 y: j,
                 parent_x: usize::MAX,
                 parent_y: usize::MAX,
-                is_wall: mtx[i][j] == u8::MAX,
-                dist: usize::MAX
+                is_wall: mtx[i][j] == u8::MAX
             };
             maze_row.push(node);
         }
@@ -149,35 +141,16 @@ fn graph_init(mtx: &[Vec<u8>], size: usize) -> Vec<Vec<DNode>>
 
 //Struct to store maze node
 #[derive(Copy, Clone)]
-struct DNode
+struct BNode
 {
     x: usize,
     y: usize,
     parent_x: usize,
     parent_y: usize,
     is_wall: bool,
-    dist: usize,
 }
 
-impl PartialEq for DNode
+impl PartialEq for BNode
 {
     fn eq(&self, other: &Self) -> bool { self.x == other.x && self.y == other.y }
-}
-
-impl PartialOrd for DNode
-{
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering>
-    {
-        Some(self.cmp(other))
-    }
-}
-
-impl Eq for DNode {}
-
-impl Ord for DNode
-{
-    fn cmp(&self, other: &Self) -> Ordering
-    {
-        self.dist.cmp(&other.dist).reverse()
-    }
 }
