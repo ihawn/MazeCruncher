@@ -5,6 +5,7 @@ solved_astar.png
 solved_tremaux.png
 solved_dfs.png
 solved_dijkstra.png
+solved_bfs.png
 *.json
 *.d
 *.pdb
