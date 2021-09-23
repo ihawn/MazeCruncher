@@ -52,6 +52,7 @@ pub fn bfs(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize, e
             {
                 maze[c.x][c.y].parent_x = current.x;
                 maze[c.x][c.y].parent_y = current.y;
+                mtx[c.x][c.y] = 2;
 
                 c.parent_x = current.x;
                 c.parent_y = current.y;
