@@ -10,6 +10,7 @@ mod algo_astar;
 mod algo_tremaux;
 mod algo_dijkstra;
 mod algo_bfs;
+mod algo_def;
 
 fn main()
 {
@@ -28,8 +29,8 @@ fn main()
     let mut save_maze = true;
     let mut show_animation = true;
     let mut anim_scale = 4;
-    let mut anim_speed = 10;
-    let mut algo = 3;
+    let mut anim_speed = 5;
+    let mut algo = 4;
     let mut decimation = 0;
 
 
@@ -39,7 +40,7 @@ fn main()
 
     if !use_default
     {
-        algo = read_int("Select algorithm:".to_string(), "1) Depth First Search\n2) Breadth First Search\n3) A*\n4) Dijkstra\n5) Tremaux\n6) All of them!".to_string(), 2);
+        algo = read_int("Select algorithm:".to_string(), "1) Depth First Search\n2) Breadth First Search\n3) Dead End Filling\n4) A*\n5) Dijkstra\n6) Tremaux\n7) All of them!".to_string(), 2);
         decimation = read_int("Select maze decimation probability (0 = perfect maze)".to_string(), "0-100: ".to_string(), 2);
         save_maze = read_bool("Save the solved and unsolved maze?".to_string(), "y/n: ".to_string());
         if save_maze

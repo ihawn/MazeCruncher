@@ -1,5 +1,4 @@
 use minifb::{Window, WindowOptions};
-use std::cmp::Ordering;
 
 //Reads the color and translates to buffer position and applies color based on matrix value
 pub fn _2d_to_flat_color(mtx: &[Vec<u8>], size: usize, n: usize, b: usize) -> u32
