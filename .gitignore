@@ -6,6 +6,7 @@ solved_tremaux.png
 solved_dfs.png
 solved_dijkstra.png
 solved_bfs.png
+solved_def.png
 *.json
 *.d
 *.pdb
