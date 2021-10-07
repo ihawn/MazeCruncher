@@ -23,6 +23,16 @@ pub fn generate_and_solve(mut size: usize, algo: usize, decimation: usize, show_
 //Growing Tree Algorithm for implementing a "perfect" maze i.e. only one solution
 fn growing_tree(mut mtx: Vec<Vec<u8>>, size: usize, algo: usize, decimation: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize, save_maze: bool)
 {
+    //Window init
+    let buff_size = size*anim_scale;
+    let mut window = crate::utils::window_init(0, "Maze!");
+
+    if show_animation
+    {
+        window = crate::utils::window_init(buff_size, "Maze!");
+    }
+
+    //Maze generation init
     println!("Generating Maze");
     let factor = decimation;
     let cell_size = (size - 1)/2;
@@ -36,8 +46,10 @@ fn growing_tree(mut mtx: Vec<Vec<u8>>, size: usize, algo: usize, decimation: usi
 
     let s: u128 = size as u128;
     let itt: u128 = (s - 3)*(s + 1)/4;
-    for _k in 0..itt
+    for k in 0..itt
     {
+        window = crate::utils::update_window(window, show_animation, k, &mtx, size, anim_speed_mult, buff_size);
+
         x = *x_list.last().unwrap();
         y = *y_list.last().unwrap();
 
@@ -97,8 +109,10 @@ fn growing_tree(mut mtx: Vec<Vec<u8>>, size: usize, algo: usize, decimation: usi
         toimage::mtx_to_img(&mtx, size, "unsolved.png".to_string());
     }
 
+    window = crate::utils::update_window(window, show_animation, 0, &mtx, size, anim_speed_mult, buff_size);
+
     println!("Maze Generation Complete");
-    crate::solve::solve_maze(mtx, size, algo, show_animation, anim_scale, anim_speed_mult, save_maze)
+    crate::solve::solve_maze(window, buff_size, mtx, size, algo, show_animation, anim_speed_mult, save_maze)
 }
 
 //Function to determine if current cell has any adjacent, non-visited cells

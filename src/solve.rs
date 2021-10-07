@@ -1,3 +1,6 @@
+use std::{thread, time};
+use minifb::Window;
+
 extern crate minifb;
 
 #[derive(Copy, Clone)]
@@ -10,7 +13,7 @@ pub enum Direction
 }
 
 
-pub fn solve_maze(mtx: Vec<Vec<u8>>, size: usize, algo: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize, save_maze: bool) 
+pub fn solve_maze(mut window: Window, buff_size: usize, mtx: Vec<Vec<u8>>, size: usize, algo: usize, show_animation: bool, anim_speed_mult: usize, save_maze: bool) 
 {
     //Solver init
     let start_x = 1;
@@ -18,22 +21,53 @@ pub fn solve_maze(mtx: Vec<Vec<u8>>, size: usize, algo: usize, show_animation: b
     let end_x = size - 2;
     let end_y = size - 2;
 
-    match algo
+    let params: MazeParams = MazeParams{
+        mtx,
+        size,
+        start_x,
+        start_y,
+        end_x,
+        end_y,
+        save_maze,
+        show_animation,
+        anim_speed_mult,
+        buff_size
+    };
+
+
+    //Control flow for all algo selection
+    let mut start = algo;
+    let mut stop = algo+1;
+    if algo == 7 { start = 1; stop = 7; }
+    
+    
+    for al in start..stop
     {
-        1 => crate::algo_dfs::dfs(mtx, size, start_x, start_y, end_x, end_y, save_maze, show_animation, anim_scale, anim_speed_mult),
-        2 => crate::algo_bfs::bfs(mtx, size, start_x, start_y, end_x, end_y, save_maze, show_animation, anim_scale, anim_speed_mult),
-        3 => crate::algo_def::def(mtx, size, start_x, start_y, end_x, end_y, save_maze, show_animation, anim_scale, anim_speed_mult),
-        4 => crate::algo_astar::astar(mtx, size, start_x, start_y, end_x, end_y, save_maze, show_animation, anim_scale, anim_speed_mult),
-        5 => crate::algo_dijkstra::dijkstra(mtx, size, start_x, start_y, end_x, end_y, save_maze, show_animation, anim_scale, anim_speed_mult),
-        6 =>  crate::algo_tremaux::tremaux(mtx, size, start_x, start_y, end_x, end_y, save_maze, show_animation, anim_scale, anim_speed_mult),
-        7 => {
-            crate::algo_dfs::dfs(mtx.clone(), size, start_x, start_y, end_x, end_y, save_maze, show_animation, anim_scale, anim_speed_mult);
-            crate::algo_bfs::bfs(mtx.clone(), size, start_x, start_y, end_x, end_y, save_maze, show_animation, anim_scale, anim_speed_mult); 
-            crate::algo_def::def(mtx.clone(), size, start_x, start_y, end_x, end_y, save_maze, show_animation, anim_scale, anim_speed_mult);     
-            crate::algo_astar::astar(mtx.clone(), size, start_x, start_y, end_x, end_y, save_maze, show_animation, anim_scale, anim_speed_mult);
-            crate::algo_dijkstra::dijkstra(mtx.clone(), size, start_x, start_y, end_x, end_y, save_maze, show_animation, anim_scale, anim_speed_mult);
-            crate::algo_tremaux::tremaux(mtx, size, start_x, start_y, end_x, end_y, save_maze, show_animation, anim_scale, anim_speed_mult);    
+        match al
+        {
+            1 => window = crate::algo_dfs::dfs(window, params.clone()),
+            2 => window = crate::algo_bfs::bfs(window, params.clone()),
+            3 => window = crate::algo_def::def(window, params.clone()),
+            4 => window = crate::algo_astar::astar(window, params.clone()),
+            5 => window = crate::algo_dijkstra::dijkstra(window, params.clone()),
+            6 => window = crate::algo_tremaux::tremaux(window, params.clone()),
+            _ => window = crate::algo_astar::astar(window, params.clone())
         }
-        _ => crate::algo_astar::astar(mtx, size, start_x, start_y, end_x, end_y, save_maze, show_animation, anim_scale, anim_speed_mult)
+        thread::sleep(time::Duration::from_secs(2));
     }
+}
+
+#[derive(Clone)]
+pub struct MazeParams
+{
+    pub mtx: Vec<Vec<u8>>,
+    pub size: usize,
+    pub start_x: usize,
+    pub start_y: usize,
+    pub end_x: usize,
+    pub end_y: usize,
+    pub save_maze: bool,
+    pub show_animation: bool,
+    pub anim_speed_mult: usize,
+    pub buff_size: usize
 }

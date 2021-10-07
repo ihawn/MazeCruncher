@@ -1,20 +1,20 @@
 extern crate minifb;
+use minifb::Window;
 use std::{cmp::Ordering, collections::BinaryHeap};
 
 
-pub fn dijkstra(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize, end_x: usize, end_y: usize, save_maze: bool, show_animation: bool, anim_scale: usize, anim_speed_mult: usize)
+pub fn dijkstra(mut window: Window, params: crate::solve::MazeParams) -> Window
 {
-    //Graphics init
-    let buff_size = size*anim_scale;
-    let mut buffer: Vec<u32> = vec![0;  1];
-
-    let mut window = crate::utils::window_init(0, "Dijkstra");
-
-    if show_animation
-    {
-        buffer = vec![0;  buff_size*buff_size];
-        window = crate::utils::window_init(buff_size, "Dijkstra");
-    }
+    let mut mtx = params.mtx;
+    let size = params.size;
+    let start_x = params.start_x;
+    let start_y = params.start_y;
+    let end_x = params.end_x;
+    let end_y = params.end_y;
+    let save_maze = params.save_maze;
+    let show_animation = params.show_animation;
+    let anim_speed_mult = params.anim_speed_mult;
+    let buff_size = params.buff_size;
 
     //Algo init
     let mut maze = graph_init(&mtx, size);
@@ -30,14 +30,8 @@ pub fn dijkstra(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usi
     let mut counter: u128 = 0;
     while !node_heap.is_empty()
     {
-        //update window
-        if show_animation && counter % (anim_speed_mult*2) as u128 == 0
-        {
-            buffer = crate::utils::update_buffer(&mtx, size, buffer);
-            window
-            .update_with_buffer(&buffer, size, size)
-            .unwrap();
-        }
+        window = crate::utils::update_window(window, show_animation, counter, &mtx, size, anim_speed_mult, buff_size);
+
 
         //Get lowest in heap
         let mut current = node_heap.pop().unwrap();
@@ -76,14 +70,8 @@ pub fn dijkstra(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usi
                 mtx[current.x][current.y] = 1;
                 current = maze[current.parent_x][current.parent_y];
 
-                //update window
-                if show_animation && counter % anim_speed_mult as u128 == 0
-                {
-                    buffer = crate::utils::update_buffer(&mtx, size, buffer);
-                    window
-                    .update_with_buffer(&buffer, size, size)
-                    .unwrap();
-                }
+                window = crate::utils::update_window(window, show_animation, counter, &mtx, size, anim_speed_mult, buff_size);
+
 
                 counter += 1;
             }
@@ -95,11 +83,15 @@ pub fn dijkstra(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usi
         max = crate::utils::update_counter(max, current.x, current.y, size, "Dijkstra");
     }
 
+    window = crate::utils::update_window(window, show_animation, 0, &mtx, size, anim_speed_mult, buff_size);
+
     println!("Solved");
     if save_maze
     {
         crate::toimage::mtx_to_img(&mtx, size, "solved_dijkstra.png".to_string());
     }
+
+    window
 }
 
 //Get adjacent nodes

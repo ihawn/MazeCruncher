@@ -1,18 +1,19 @@
 use rand::Rng;
+extern crate minifb;
+use minifb::Window;
 
-pub fn tremaux(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize, end_x: usize, end_y: usize, save_maze: bool, show_animation: bool, anim_scale: usize, anim_speed_mult: usize)
+pub fn tremaux(mut window: Window, params: crate::solve::MazeParams) -> Window
 {
-    //Graphics init
-    let buff_size = size*anim_scale;
-    let mut buffer: Vec<u32> = vec![0;  1];
-
-    let mut window = crate::utils::window_init(0, "Tremaux");
-
-    if show_animation
-    {
-        buffer = vec![0;  buff_size*buff_size];
-        window = crate::utils::window_init(buff_size, "Tremaux");
-    }
+    let mut mtx = params.mtx;
+    let size = params.size;
+    let start_x = params.start_x;
+    let start_y = params.start_y;
+    let end_x = params.end_x;
+    let end_y = params.end_y;
+    let save_maze = params.save_maze;
+    let show_animation = params.show_animation;
+    let anim_speed_mult = params.anim_speed_mult;
+    let buff_size = params.buff_size;
 
     //Algo init
     let mut x = start_x;
@@ -24,19 +25,13 @@ pub fn tremaux(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usiz
     let mut counter: u128 = 0;
     loop
     {
-        //update window
-        if show_animation && counter % anim_speed_mult as u128 == 0
-        {
-            buffer = crate::utils::update_buffer(&mtx, size, buffer);
-            window
-            .update_with_buffer(&buffer, size, size)
-            .unwrap();
-        }
+        window = crate::utils::update_window(window, show_animation, counter, &mtx, size, anim_speed_mult, buff_size);
+
 
         mtx[x][y] += 1;
         let trav: Option<crate::solve::Direction> = trav_rand(&mtx, x, y, 0); //Get travel direction
 
-        let mut v: Vec<usize> = vec!();
+        let v: Vec<usize>;
         match trav //Travel based on direction. Set parent 
         {
             Some(crate::solve::Direction::Up) => {v = vec![x, y-1]; maze[x][y-1].parent_x = x; maze[x][y-1].parent_y = y;},
@@ -61,11 +56,16 @@ pub fn tremaux(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usiz
  
         counter += 1;
     }
+
+    window = crate::utils::update_window(window, show_animation, 0, &mtx, size, anim_speed_mult, buff_size);
+
     println!("Solved");
     if save_maze
     {
         crate::toimage::mtx_to_img(&mtx, size, "solved_tremaux.png".to_string());
     }
+
+    window
 }
 
 //Returns direction to travel to. 0 = can't travel, 1 = up, 2 = right, 3 = down, 4 = left

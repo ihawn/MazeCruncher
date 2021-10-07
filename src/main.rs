@@ -64,7 +64,7 @@ fn main()
         {
             show_animation = false;
         }
-
+        
     }
 
     println!("Initializing");

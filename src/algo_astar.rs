@@ -1,20 +1,20 @@
 extern crate minifb;
-use std::{cmp::Ordering, collections::BinaryHeap, };
+use minifb::Window;
+use std::{cmp::Ordering, collections::BinaryHeap};
 
 
-pub fn astar(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize, end_x: usize, end_y: usize, save_maze: bool, show_animation: bool, anim_scale: usize, anim_speed_mult: usize)
+pub fn astar(mut window: Window, params: crate::solve::MazeParams) -> Window
 {
-    //Graphics init
-    let buff_size = size*anim_scale;
-    let mut buffer: Vec<u32> = vec![0;  1];
-
-    let mut window = crate::utils::window_init(0, "A*");
-
-    if show_animation
-    {
-        buffer = vec![0;  buff_size*buff_size];
-        window = crate::utils::window_init(buff_size, "A*");
-    }
+    let mut mtx = params.mtx;
+    let size = params.size;
+    let start_x = params.start_x;
+    let start_y = params.start_y;
+    let end_x = params.end_x;
+    let end_y = params.end_y;
+    let save_maze = params.save_maze;
+    let show_animation = params.show_animation;
+    let anim_speed_mult = params.anim_speed_mult;
+    let buff_size = params.buff_size;
 
     //Algo init
     let mut maze = graph_init(&mtx, size, end_x, end_y);
@@ -24,7 +24,7 @@ pub fn astar(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize,
     open_heap.push(maze[start_x][start_y]);
 
     //let mut current = open_list[0];
-    let mut current: MazeNode = maze[start_x][start_y];
+    let mut current: MazeNode;
     let end_node = maze[end_x][end_y];
 
     let mut max = 0; //For the counter
@@ -32,14 +32,7 @@ pub fn astar(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize,
     let mut counter: u128 = 0;
     while !open_heap.is_empty()
     {
-        //update window
-        if show_animation && counter % anim_speed_mult as u128 == 0
-        {
-            buffer = crate::utils::update_buffer(&mtx, size, buffer);
-            window
-            .update_with_buffer(&buffer, size, size)
-            .unwrap();
-        }
+        window = crate::utils::update_window(window, show_animation, counter, &mtx, size, anim_speed_mult, buff_size);
 
         current = open_heap.pop().unwrap(); //Get node with lowest f
         current.closed = true;
@@ -59,14 +52,7 @@ pub fn astar(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize,
                 mtx[current.x][current.y] = 1;
                 current = maze[current.parent_x][current.parent_y];
 
-                //update window
-                if show_animation && counter % anim_speed_mult as u128 == 0
-                {
-                    buffer = crate::utils::update_buffer(&mtx, size, buffer);
-                    window
-                    .update_with_buffer(&buffer, size, size)
-                    .unwrap();
-                }
+                window = crate::utils::update_window(window, show_animation, counter, &mtx, size, anim_speed_mult, buff_size);
 
                 counter += 1;
             }
@@ -92,11 +78,15 @@ pub fn astar(mut mtx: Vec<Vec<u8>>, size: usize, start_x: usize, start_y: usize,
         max = crate::utils::update_counter(max, current.x, current.y, size, "A*");
     }
 
+    window = crate::utils::update_window(window, show_animation, 0, &mtx, size, anim_speed_mult, buff_size);
+
     println!("Solved");
     if save_maze
     {
         crate::toimage::mtx_to_img(&mtx, size, "solved_astar.png".to_string());
     }
+    
+    window
 }
 
 //Initialize graph from the maze matrix
