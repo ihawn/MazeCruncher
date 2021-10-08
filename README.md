@@ -21,7 +21,7 @@ Welcome to maze cruncher!
 
 * **Show Animation:** Whether or not to show the animation of the algorithm solving the maze. It looks cool but takes way longer than just letting it run. Automatically disabled for mazes with size >2048.
 
-* **Animation Scale:** The scale factor that the maze animation will display at. 1 = oneCancel changes pixel per maze cell.
+* **Animation Scale:** The scale factor that the maze animation will display at. 1 = one pixel per maze cell. Make sure animation_scale*maze_size < display resolution height.
 
 * **Animation Speed:** The speed scale for the maze animation. 1 = n cell traversals per second where n = your monitor's refresh rate.
 
