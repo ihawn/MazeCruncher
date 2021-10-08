@@ -14,7 +14,7 @@ pub fn mtx_to_img(mtx: &[Vec<u8>], size: usize, name: String)
         {
 
             //Determine which colors to assign based on the maze matrix
-            if mtx[i][j] < u8::MAX
+            if mtx[i][j] < u8::MAX && mtx[i][j] != 4
             {
                 if mtx[i][j] == 0 { array = set_array_value(array, j, i, 255, 255, 255); } //space
                 else if mtx[i][j] == 1 { array = set_array_value(array, j, i, 255, 0, 0); } //travelled once

@@ -138,8 +138,6 @@ fn get_children(maze: &[Vec<MazeNode>], node: MazeNode) -> Vec<MazeNode>
 }
 
 
-
-
 //Struct to store maze node
 #[derive(Copy, Clone)]
 struct MazeNode

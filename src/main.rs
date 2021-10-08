@@ -11,6 +11,7 @@ mod algo_tremaux;
 mod algo_dijkstra;
 mod algo_bfs;
 mod algo_def;
+mod algo_doubleastar;
 
 fn main()
 {
@@ -25,12 +26,12 @@ fn main()
 ");
 
 
-    let mut size: usize = 200;
+    let mut size: usize = 100;
     let mut save_maze = true;
     let mut show_animation = true;
-    let mut anim_scale = 4;
-    let mut anim_speed = 5;
-    let mut algo = 4;
+    let mut anim_scale = 7;
+    let mut anim_speed = 2;
+    let mut algo = 8;
     let mut decimation = 0;
 
 
@@ -40,7 +41,7 @@ fn main()
 
     if !use_default
     {
-        algo = read_int("Select algorithm:".to_string(), "1) Depth First Search\n2) Breadth First Search\n3) Dead End Filling\n4) A*\n5) Dijkstra\n6) Tremaux\n7) All of them!".to_string(), 2);
+        algo = read_int("Select algorithm:".to_string(), "1) Depth First Search\n2) Breadth First Search\n3) Dead End Filling\n4) A*\n5) Double A*\n6) Dijkstra\n7) Tremaux\n8) All of them!".to_string(), 2);
         decimation = read_int("Select maze decimation probability (0 = perfect maze)".to_string(), "0-100: ".to_string(), 2);
         save_maze = read_bool("Save the solved and unsolved maze?".to_string(), "y/n: ".to_string());
         if save_maze
@@ -56,7 +57,7 @@ fn main()
 
             if show_animation
             {
-                anim_scale = read_int("Enter animation scale: ".to_string(), "".to_string(), anim_scale);
+                anim_scale = read_int("Enter animation scale (Make sure scale*size < your display's smallest dimension): ".to_string(), "".to_string(), anim_scale);
                 anim_speed = read_int("Enter animation speed: ".to_string(), "".to_string(), anim_speed);
             }
         }

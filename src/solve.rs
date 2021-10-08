@@ -38,7 +38,7 @@ pub fn solve_maze(mut window: Window, buff_size: usize, mtx: Vec<Vec<u8>>, size:
     //Control flow for all algo selection
     let mut start = algo;
     let mut stop = algo+1;
-    if algo == 7 { start = 1; stop = 7; }
+    if algo == 8 { start = 1; stop = 8; }
     
     
     for al in start..stop
@@ -49,8 +49,9 @@ pub fn solve_maze(mut window: Window, buff_size: usize, mtx: Vec<Vec<u8>>, size:
             2 => window = crate::algo_bfs::bfs(window, params.clone()),
             3 => window = crate::algo_def::def(window, params.clone()),
             4 => window = crate::algo_astar::astar(window, params.clone()),
-            5 => window = crate::algo_dijkstra::dijkstra(window, params.clone()),
-            6 => window = crate::algo_tremaux::tremaux(window, params.clone()),
+            5 => window = crate::algo_doubleastar::double_astar(window, params.clone()),
+            6 => window = crate::algo_dijkstra::dijkstra(window, params.clone()),
+            7 => window = crate::algo_tremaux::tremaux(window, params.clone()),
             _ => window = crate::algo_astar::astar(window, params.clone())
         }
         thread::sleep(time::Duration::from_secs(2));

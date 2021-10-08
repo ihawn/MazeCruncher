@@ -14,7 +14,7 @@ pub fn generate_and_solve(mut size: usize, algo: usize, decimation: usize, show_
 
     let n = size;
     let m = size;    
-    let mut m:Vec<Vec<u8>> = vec![vec![2; n]; m];
+    let mut m:Vec<Vec<u8>> = vec![vec![4; n]; m];
     m = prime_matrix(m, size);
 
     growing_tree(m, size, algo, decimation, show_animation, anim_scale, anim_speed_mult, save_maze);
@@ -40,7 +40,7 @@ fn growing_tree(mut mtx: Vec<Vec<u8>>, size: usize, algo: usize, decimation: usi
     let mut y = rand::thread_rng().gen_range(0..cell_size)*2 + 1;
     let mut x_list = Vec::new();
     let mut y_list = Vec::new();
-    x_list.push(x); //push the starting point onto the stack
+    x_list.push(x); //push the starting point onto the list
     y_list.push(y);
     mtx[x][y] = 0;
 
@@ -48,6 +48,12 @@ fn growing_tree(mut mtx: Vec<Vec<u8>>, size: usize, algo: usize, decimation: usi
     let itt: u128 = (s - 3)*(s + 1)/4;
     for k in 0..itt
     {
+        if k%(itt/100) == 0
+        {
+            let m = 100*k/itt + 1;
+            println!("Generating Maze: {}%", m);
+        }
+
         window = crate::utils::update_window(window, show_animation, k, &mtx, size, anim_speed_mult, buff_size);
 
         x = *x_list.last().unwrap();

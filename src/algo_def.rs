@@ -18,6 +18,7 @@ pub fn def(mut window: Window, params: crate::solve::MazeParams) -> Window
 
     //Algo init
     let mut dead_list: Vec<(usize, usize)> = Vec::new(); 
+    println!("Solving Maze with Dead End Filling");
     
     //Find initial dead ends
     for i in 1..size-1
