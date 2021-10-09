@@ -68,6 +68,8 @@ pub fn def(mut window: Window, params: crate::solve::MazeParams) -> Window
             if mtx[i][j] == 0 { mtx[i][j] = 1; }
         }
     }
+ 
+    
 
     window = crate::utils::update_window(window, show_animation, 0, &mtx, size, anim_speed_mult, buff_size);
 
