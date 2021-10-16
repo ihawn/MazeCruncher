@@ -82,6 +82,7 @@ pub fn bfs(mut window: Window, params: crate::solve::MazeParams) -> Window
     window
 }
 
+
 //Get adjacent nodes
 fn get_children(maze: &[Vec<BNode>], node: BNode) -> Vec<BNode>
 {
