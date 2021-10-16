@@ -93,7 +93,7 @@ pub fn double_astar(mut window: Window, params: crate::solve::MazeParams) -> Win
         }
 
         counter += 1;
-        max = crate::utils::update_counter(max, size - (current1.x as i32 - current2.x as i32).abs() as usize, size - (current1.y as i32 - current2.y as i32).abs() as usize, size, "Double A*");
+        max = crate::utils::update_counter(max, size - (current1.x as i32 - current2.x as i32).abs() as usize, size - (current1.y as i32 - current2.y as i32).abs() as usize, size, "A*");
     }
 
     window = crate::utils::update_window(window, show_animation, 0, &mtx, size, anim_speed_mult, buff_size);
