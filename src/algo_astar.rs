@@ -24,20 +24,20 @@ pub fn astar(mut window: Window, params: crate::solve::MazeParams) -> Window
     open_heap.push(maze[0].clone());
 
     //let mut current = open_list[0];
-    let mut current: Node = maze[0].clone();
-    let end_node = maze[maze.len()-1].clone();
+    let mut current: Node;
 
     let mut max = 0; //For the counter
 
     let mut counter: u128 = 0;
     while !open_heap.is_empty()
-    {
-        
+    {      
         window = crate::utils::update_window(window, show_animation, counter, &mtx, size, anim_speed_mult, buff_size);
 
         current = open_heap.pop().unwrap(); //Get node with lowest f
         current.node.closed = true; 
-        maze[current.clone().node.index].node.open = false;
+        current.node.open = false;
+        maze[current.node.index].node.open = false;
+        maze[current.node.index].node.closed = true;
 
         
         let mut o = current.node;
@@ -45,21 +45,12 @@ pub fn astar(mut window: Window, params: crate::solve::MazeParams) -> Window
         mtx = crate::utils::fill_between_nodes(mtx, o.x, o.y, p.x, p.y, 2);
 
 
-        // println!("\nCurrent: {},{}", current.node.x, current.node.y);
-        // println!("Parent: {},{}", last.node.x, last.node.y);
-        // for u in 0..last.connected.len()
-        // {
-        //     println!("branch: {}, {}",last.connected[u].x, last.connected[u].y);
-        //     println!("weight: {}",last.edge_weights[u]);
-        // }
-
-
-        mtx[current.node.x][current.node.y] = 2;
-        maze[current.node.index] = current.clone();
+        //maze[current.node.index] = current.clone();
 
         //Stopping condition
-        if current.node == end_node.node
+        if current.node.x == end_x && current.node.y == end_y
         {   
+            println!("{},{}", current.node.x, current.node.y);
             //retreive path
             while current.node.x != start_x || current.node.y != start_y
             {
@@ -76,29 +67,24 @@ pub fn astar(mut window: Window, params: crate::solve::MazeParams) -> Window
             mtx[start_x][start_y] = 1;
             break 
         }
-        //println!("Current: {},{}", current.node.x, current.node.y);
 
-        //Get children and update lists
-        //let mut children = get_children(&maze, current); 
 
         'inner: for i in 0..current.connected.len()
         {
-            if  maze[current.connected[i].index].node.open || current.connected[i].closed { continue 'inner; }
+            if maze[current.connected[i]].node.open || maze[current.connected[i]].node.closed/*current.connected[i].closed*/ { continue 'inner; }
             
-            current.connected[i].g = current.node.g + current.edge_weights[i] as usize;
-            current.connected[i].f = current.connected[i].g + current.connected[i].h;
+            maze[current.connected[i]].node.g = maze[current.node.index].node.g + maze[current.node.index].edge_weights[i] as usize;
+            maze[current.connected[i]].node.f = maze[current.connected[i]].node.g + maze[current.connected[i]].node.h;
 
-            maze[current.connected[i].index].node.open = true;
-            maze[current.connected[i].index].node.parent_index = current.node.index;
-
+            maze[current.connected[i]].node.open = true;
+            maze[current.connected[i]].node.closed = false;
             
-            // println!("\nCurrent: {},{}", p.x, p.y);
-            // println!("branch: {}, {}",o.x, o.y);
-
+            maze[current.connected[i]].node.parent_index = current.node.index;
 
             
-            open_heap.push(maze[current.clone().connected[i].index].clone());
+            open_heap.push(maze[current.connected[i]].clone());
         }
+
 
 
         counter += 1;
@@ -119,8 +105,6 @@ pub fn astar(mut window: Window, params: crate::solve::MazeParams) -> Window
 //Initialize graph from the maze matrix
 fn graph_init(mtx: &[Vec<u8>], size: usize, start_x: usize, start_y: usize, end_x: usize, end_y: usize) -> Vec<Node>//Vec<Vec<MazeNode>>
 {
-    let mut maze_graph: Vec<Vec<MazeNode>> = vec!();
-
     //Vectors for storing the maze matrix via Compressed Sparse Row format
     let mut nodes: Vec<Node> = vec!();
     let mut node_x: Vec<usize> = vec!();
@@ -132,9 +116,6 @@ fn graph_init(mtx: &[Vec<u8>], size: usize, start_x: usize, start_y: usize, end_
     nodes.push(Node{ node: MazeNode{
             x: start_x,
             y: start_y,
-            parent_x: usize::MAX,
-            parent_y: usize::MAX,
-            is_wall: mtx[start_x][start_y] == u8::MAX,
             open: false,
             closed: false,
             h: crate::utils::euclidean(start_x, end_x, start_y, end_y) as usize,
@@ -149,23 +130,20 @@ fn graph_init(mtx: &[Vec<u8>], size: usize, start_x: usize, start_y: usize, end_
     //Build the nodes
     for i in 0..size
     {
-        let mut maze_row: Vec<MazeNode> = vec!();
         for j in 0..size
         {
             
             //If not a wall and should be a node
             if mtx[i][j] != u8::MAX && 
             (((mtx[i+1][j] == u8::MAX && mtx[i-1][j] != u8::MAX) || (mtx[i+1][j] != u8::MAX && mtx[i-1][j] == u8::MAX)) ||
-            ((mtx[i][j+1] == u8::MAX && mtx[i][j-1] != u8::MAX) || (mtx[i][j+1] != u8::MAX && mtx[i][j-1] == u8::MAX)))
+            ((mtx[i][j+1] == u8::MAX && mtx[i][j-1] != u8::MAX) || (mtx[i][j+1] != u8::MAX && mtx[i][j-1] == u8::MAX)) ||
+            (mtx[i+1][j] != u8::MAX && mtx[i-1][j] != u8::MAX && mtx[i][j+1] != u8::MAX && mtx[i][j-1] != u8::MAX))
             {
                 node_count += 1;
                 
                 nodes.push(Node{ node: MazeNode{
                     x: i,
                     y: j,
-                    parent_x: usize::MAX,
-                    parent_y: usize::MAX,
-                    is_wall: mtx[i][j] == u8::MAX,
                     open: false,
                     closed: false,
                     h: crate::utils::euclidean(i, end_x, j, end_y) as usize,
@@ -179,31 +157,13 @@ fn graph_init(mtx: &[Vec<u8>], size: usize, start_x: usize, start_y: usize, end_
 
                 matrix[i][j] = 1;
             }
-
-
-            // maze_row.push(MazeNode{
-            //     x: i,
-            //     y: j,
-            //     parent_x: usize::MAX,
-            //     parent_y: usize::MAX,
-            //     is_wall: mtx[i][j] == u8::MAX,
-            //     open: false,
-            //     closed: false,
-            //     h: crate::utils::euclidean(i, end_x, j, end_y) as usize,
-            //     g: usize::MAX,
-            //     f: 0
-            // });
         }
-        maze_graph.push(maze_row);
     }
 
     //Add end node
     nodes.push(Node{ node: MazeNode{
         x: end_x,
         y: end_y,
-        parent_x: usize::MAX,
-        parent_y: usize::MAX,
-        is_wall: mtx[end_x][end_y] == u8::MAX,
         open: false,
         closed: false,
         h: 0,
@@ -216,6 +176,7 @@ fn graph_init(mtx: &[Vec<u8>], size: usize, start_x: usize, start_y: usize, end_
 
     //Connect the nodes
     let l = nodes.len();
+    let mut left_nodes: Vec<usize> = vec![usize::MAX; size]; //Container to store the last node to the left of current with a given y value
     for i in 0..l-1
     {
         let n1 = nodes[i].node;
@@ -225,40 +186,32 @@ fn graph_init(mtx: &[Vec<u8>], size: usize, start_x: usize, start_y: usize, end_
         {
             let n2 = nodes[i+1].node;
             let diff = (nodes[i].node.y as i32 - nodes[i+1].node.y as i32).abs() as u16;
-            nodes[i].connected.push(n2);
-            nodes[i+1].connected.push(n1);
+            nodes[i].connected.push(n2.index);
+            nodes[i+1].connected.push(n1.index);
             nodes[i].edge_weights.push(diff);
             nodes[i+1].edge_weights.push(diff);
         }
 
         //connect to node laterally 
-        for n in 0..i
+        if left_nodes[nodes[i].node.y] != usize::MAX &&
+        !wall_between_nodes_horz(mtx, &nodes[left_nodes[nodes[i].node.y]], &nodes[i])
         {
-            if nodes[i].node.y == nodes[n].node.y && 
-            !wall_between_nodes_horz(mtx, &nodes[n], &nodes[i]) &&
-            nodes[i].node != nodes[n].node
-            {
-                let n2 = nodes[n].node;
-                let diff = (nodes[i].node.x as i32 - nodes[n].node.x as i32).abs() as u16;
-                nodes[i].connected.push(n2);
-                nodes[n].connected.push(n1);
-                nodes[i].edge_weights.push(diff);
-                nodes[n].edge_weights.push(diff);
-            }
+            let n2 = nodes[left_nodes[nodes[i].node.y]].node;
+            let diff = (nodes[i].node.x as i32 - n2.x as i32).abs() as u16;
+
+            nodes[i].connected.push(n2.index);
+            nodes[n2.index].connected.push(n1.index);
+
+            nodes[i].edge_weights.push(diff);
+            nodes[n2.index].edge_weights.push(diff);
         }
+
+        left_nodes[nodes[i].node.y] = nodes[i].node.index;
+
         
     }
+    //crate::toimage::mtx_to_img(&matrix, size, "Node test.png".to_string());
 
-    matrix[nodes[200].node.x][nodes[200].node.y] = 2;
-    println!("root: {}, {}",nodes[200].node.x, nodes[200].node.y);
-    for u in 0..nodes[200].connected.len()
-    {
-        println!("branch: {}, {}",nodes[200].connected[u].x, nodes[200].connected[u].y);
-        println!("weight: {}",nodes[200].edge_weights[u]);
-    }
-    crate::toimage::mtx_to_img(&matrix, size, "Node test.png".to_string());
-
-    //maze_graph
     nodes
 }
 
@@ -284,31 +237,11 @@ fn wall_between_nodes_horz(mtx: &[Vec<u8>], n1: &Node, n2: &Node) -> bool
     false
 }
 
-fn get_children(maze: &[Vec<MazeNode>], node: MazeNode) -> Vec<MazeNode>
-{
-    let x = node.x;
-    let y = node.y;
-    let mut children: Vec<MazeNode> = vec!();
-
-    if x < maze[0].len()-1 && !maze[x+1][y].is_wall { children.push(maze[x+1][y]); }
-    if x > 0 && !maze[x-1][y].is_wall { children.push(maze[x-1][y]); }
-    if y < maze[0].len()-1 && !maze[x][y+1].is_wall { children.push(maze[x][y+1]); }
-    if y > 0 && !maze[x][y-1].is_wall { children.push(maze[x][y-1]); }
-
-    for i in 0..children.len()
-    {
-        children[i].parent_x = node.x;
-        children[i].parent_y = node.y;
-    }
-
-    children
-}
-
 #[derive(Clone)]
 struct Node
 {
     node: MazeNode,
-    connected: Vec<MazeNode>,
+    connected: Vec<usize>,
     edge_weights: Vec<u16>
 }
 
@@ -341,9 +274,6 @@ struct MazeNode
 {
     x: usize,
     y: usize,
-    parent_x: usize,
-    parent_y: usize,
-    is_wall: bool,
     open: bool,
     closed: bool,
     h: usize,

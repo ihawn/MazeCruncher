@@ -107,7 +107,7 @@ fn growing_tree(mut mtx: Vec<Vec<u8>>, size: usize, algo: usize, decimation: usi
     }
 
     //Prevent a perfect maze for decimation factor > 0
-    mtx = decimate_maze(mtx, size, factor);
+    if factor > 0 { mtx = decimate_maze(mtx, size, factor); }
 
     //print_matrix(&mtx, size);
     if save_maze

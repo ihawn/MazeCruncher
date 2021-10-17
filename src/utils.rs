@@ -106,12 +106,12 @@ pub fn fill_between_nodes(mut mtx: Vec<Vec<u8>>, x1: usize, y1: usize, x2: usize
         ey = y1;
     }
 
-    for x in sx..ex
+    for x in sx..ex+1
     {
         mtx[x][sy] = val;
     }
 
-    for y in sy..ey
+    for y in sy..ey+1
     {
         mtx[sx][y] = val;
     }
