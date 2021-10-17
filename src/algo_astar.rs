@@ -24,7 +24,7 @@ pub fn astar(mut window: Window, params: crate::solve::MazeParams) -> Window
     open_heap.push(maze[0].clone());
 
     //let mut current = open_list[0];
-    let mut current: Node;
+    let mut current: Node = maze[0].clone();
     let end_node = maze[maze.len()-1].clone();
 
     let mut max = 0; //For the counter
@@ -32,25 +32,42 @@ pub fn astar(mut window: Window, params: crate::solve::MazeParams) -> Window
     let mut counter: u128 = 0;
     while !open_heap.is_empty()
     {
+        
         window = crate::utils::update_window(window, show_animation, counter, &mtx, size, anim_speed_mult, buff_size);
 
         current = open_heap.pop().unwrap(); //Get node with lowest f
-        current.clone().node.closed = true;
-        
+        current.node.closed = true; 
         maze[current.clone().node.index].node.open = false;
 
+        
+        let mut o = current.node;
+        let mut p = maze[current.node.parent_index].node;
+        mtx = crate::utils::fill_between_nodes(mtx, o.x, o.y, p.x, p.y, 2);
 
-        mtx[current.clone().node.x][current.clone().node.y] = 2;
-        maze[current.clone().node.index] = current.clone();
+
+        // println!("\nCurrent: {},{}", current.node.x, current.node.y);
+        // println!("Parent: {},{}", last.node.x, last.node.y);
+        // for u in 0..last.connected.len()
+        // {
+        //     println!("branch: {}, {}",last.connected[u].x, last.connected[u].y);
+        //     println!("weight: {}",last.edge_weights[u]);
+        // }
+
+
+        mtx[current.node.x][current.node.y] = 2;
+        maze[current.node.index] = current.clone();
 
         //Stopping condition
-        if current == end_node 
+        if current.node == end_node.node
         {   
             //retreive path
-            while current.clone().node.x != start_x || current.clone().node.y != start_y
+            while current.node.x != start_x || current.node.y != start_y
             {
-                mtx[current.clone().node.x][current.clone().node.y] = 1;
-                current = maze[current.clone().node.parent_index].clone();
+                current = maze[current.node.parent_index].clone();
+
+                o = current.node;
+                mtx = crate::utils::fill_between_nodes(mtx, o.x, o.y, p.x, p.y, 1);
+                p = current.node;
 
                 window = crate::utils::update_window(window, show_animation, counter, &mtx, size, anim_speed_mult, buff_size);
 
@@ -59,20 +76,30 @@ pub fn astar(mut window: Window, params: crate::solve::MazeParams) -> Window
             mtx[start_x][start_y] = 1;
             break 
         }
+        //println!("Current: {},{}", current.node.x, current.node.y);
 
         //Get children and update lists
         //let mut children = get_children(&maze, current); 
 
-        'inner: for i in 0..current.clone().connected.len()
+        'inner: for i in 0..current.connected.len()
         {
-            if  maze[current.clone().connected[i].index].node.closed || current.clone().connected[i].closed { continue 'inner; }
+            if  maze[current.connected[i].index].node.open || current.connected[i].closed { continue 'inner; }
             
-            current.clone().connected[i].g = current.clone().node.g + current.clone().edge_weights[i] as usize;
-            current.clone().connected[i].f = current.clone().connected[i].g + current.clone().connected[i].h;
+            current.connected[i].g = current.node.g + current.edge_weights[i] as usize;
+            current.connected[i].f = current.connected[i].g + current.connected[i].h;
 
-            maze[current.clone().connected[i].index].node.open = true;
+            maze[current.connected[i].index].node.open = true;
+            maze[current.connected[i].index].node.parent_index = current.node.index;
+
+            
+            // println!("\nCurrent: {},{}", p.x, p.y);
+            // println!("branch: {}, {}",o.x, o.y);
+
+
+            
             open_heap.push(maze[current.clone().connected[i].index].clone());
         }
+
 
         counter += 1;
         max = crate::utils::update_counter(max, current.clone().node.x, current.clone().node.y, size, "A*");
@@ -125,11 +152,14 @@ fn graph_init(mtx: &[Vec<u8>], size: usize, start_x: usize, start_y: usize, end_
         let mut maze_row: Vec<MazeNode> = vec!();
         for j in 0..size
         {
+            
             //If not a wall and should be a node
             if mtx[i][j] != u8::MAX && 
             (((mtx[i+1][j] == u8::MAX && mtx[i-1][j] != u8::MAX) || (mtx[i+1][j] != u8::MAX && mtx[i-1][j] == u8::MAX)) ||
             ((mtx[i][j+1] == u8::MAX && mtx[i][j-1] != u8::MAX) || (mtx[i][j+1] != u8::MAX && mtx[i][j-1] == u8::MAX)))
             {
+                node_count += 1;
+                
                 nodes.push(Node{ node: MazeNode{
                     x: i,
                     y: j,
@@ -146,7 +176,6 @@ fn graph_init(mtx: &[Vec<u8>], size: usize, start_x: usize, start_y: usize, end_
                 }, connected: vec!(), edge_weights: vec!(), });
                 node_x.push(i);
                 node_y.push(j);
-                node_count += 1;
 
                 matrix[i][j] = 1;
             }
