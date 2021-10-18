@@ -87,3 +87,34 @@ pub fn update_counter(mut max: usize, x: usize, y: usize, size: usize, name: &st
 
     max
 }
+
+//Fill in matrix values between nodes for the animation/solution image
+pub fn fill_between_nodes(mut mtx: Vec<Vec<u8>>, x1: usize, y1: usize, x2: usize, y2: usize, val: u8) -> Vec<Vec<u8>>
+{
+    let mut sx: usize = x1;
+    let mut ex: usize = x2;
+    if x2 < x1
+    {
+        sx = x2;
+        ex = x1;
+    }
+    let mut sy: usize = y1;
+    let mut ey: usize = y2;
+    if y2 < y1
+    {
+        sy = y2;
+        ey = y1;
+    }
+
+    for x in sx..ex+1
+    {
+        mtx[x][sy] = val;
+    }
+
+    for y in sy..ey+1
+    {
+        mtx[sx][y] = val;
+    }
+
+    mtx
+}

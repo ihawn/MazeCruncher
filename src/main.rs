@@ -15,7 +15,6 @@ mod algo_doubleastar;
 
 fn main()
 {
-
     println!(r"
  __  __                 _____                       _               _ 
 |  \/  |               /  __ \                     | |             | |
@@ -30,7 +29,7 @@ fn main()
     let mut save_maze = true;
     let mut show_animation = true;
     let mut anim_scale = 7;
-    let mut anim_speed = 2;
+    let mut anim_speed = 4;
     let mut algo = 8;
     let mut decimation = 0;
 
