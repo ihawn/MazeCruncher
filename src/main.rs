@@ -15,7 +15,6 @@ mod algo_doubleastar;
 
 fn main()
 {
-
     println!(r"
  __  __                 _____                       _               _ 
 |  \/  |               /  __ \                     | |             | |
