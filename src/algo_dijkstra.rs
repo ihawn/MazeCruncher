@@ -37,7 +37,8 @@ pub fn dijkstra(mut window: Window, params: crate::solve::MazeParams) -> Window
         let mut current = node_heap.pop().unwrap();
         let mut o = current.node;
         let mut p = maze[current.node.parent_index].node;
-        mtx = crate::utils::fill_between_nodes(mtx, o.x, o.y, p.x, p.y, 2);
+        mtx[o.x][o.y] = 2;
+        if show_animation { mtx = crate::utils::fill_between_nodes(mtx, o.x, o.y, p.x, p.y, 2); }
         
 
         //Loop through adjacent cells and update parents and distances
