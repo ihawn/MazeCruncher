@@ -30,7 +30,7 @@ fn main()
     let mut show_animation = true;
     let mut anim_scale = 7;
     let mut anim_speed = 4;
-    let mut algo = 8;
+    let mut algo = 6;
     let mut decimation = 0;
 
 

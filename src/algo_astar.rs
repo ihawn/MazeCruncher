@@ -139,7 +139,7 @@ fn graph_init(mtx: &[Vec<u8>], size: usize, start_x: usize, start_y: usize, end_
                 node_count += 1;
                 cur_node = Node{ node: MazeNode{
                     x: i,
-                    y: j,
+                    y: j, 
                     open: false,
                     closed: false,
                     g: usize::MAX,
@@ -235,7 +235,7 @@ fn wall_between_nodes_horz(mtx: &[Vec<u8>], n1: &Node, n2: &Node) -> bool
 
 //Struct to store maze node
 #[derive(Copy, Clone)]
-pub struct MazeNode
+struct MazeNode
 {
     x: usize,
     y: usize,
