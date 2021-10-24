@@ -5,6 +5,7 @@ mod generate;
 mod toimage;
 mod solve;
 mod utils;
+mod growing_tree;
 mod algo_dfs;
 mod algo_astar;
 mod algo_tremaux;
@@ -30,7 +31,8 @@ fn main()
     let mut show_animation = true;
     let mut anim_scale = 7;
     let mut anim_speed = 4;
-    let mut algo = 6;
+    let mut algo = 8;
+    let mut gen_algo = 1;
     let mut decimation = 0;
 
 
@@ -40,7 +42,8 @@ fn main()
 
     if !use_default
     {
-        algo = read_int("Select algorithm:".to_string(), "1) Depth First Search\n2) Breadth First Search\n3) Dead End Filling\n4) A*\n5) Double A*\n6) Dijkstra\n7) Tremaux\n8) All of them!".to_string(), 2);
+        gen_algo = read_int("Select generation algo".to_string(), "1) Growing Tree\n2) Kruskal".to_string(), 1);
+        algo = read_int("Select solution algorithm:".to_string(), "1) Depth First Search\n2) Breadth First Search\n3) Dead End Filling\n4) A*\n5) Double A*\n6) Dijkstra\n7) Tremaux\n8) All of them!".to_string(), 2);
         decimation = read_int("Select maze decimation probability (0 = perfect maze)".to_string(), "0-100: ".to_string(), 2);
         save_maze = read_bool("Save the solved and unsolved maze?".to_string(), "y/n: ".to_string());
         if save_maze
@@ -70,7 +73,7 @@ fn main()
     println!("Initializing");
 
     let before = Instant::now();
-    generate::generate_and_solve(size, algo, decimation, show_animation, anim_scale, anim_speed, save_maze); //Solver is called from within generator
+    generate::generate_and_solve(size, gen_algo, algo, decimation, show_animation, anim_scale, anim_speed, save_maze); //Solver is called from within generator
     println!("Elapsed time: {:.2?}", before.elapsed());
 
     println!("Done!");

@@ -105,7 +105,7 @@ pub fn astar(mut window: Window, params: crate::solve::MazeParams) -> Window
 }
 
 //Initialize graph from the maze matrix
-fn graph_init(mtx: &[Vec<u8>], size: usize, start_x: usize, start_y: usize, end_x: usize, end_y: usize) -> Vec<Node>//Vec<Vec<MazeNode>>
+pub fn graph_init(mtx: &[Vec<u8>], size: usize, start_x: usize, start_y: usize, end_x: usize, end_y: usize) -> Vec<Node>//Vec<Vec<MazeNode>>
 {
     println!("Building graph...");
 
@@ -180,7 +180,7 @@ fn graph_init(mtx: &[Vec<u8>], size: usize, start_x: usize, start_y: usize, end_
     nodes
 }
 
-fn attach_nodes(mtx: &[Vec<u8>], mut nodes: Vec<Node>, mut left_nodes: Vec<usize>, node_count: usize) -> (Vec<Node>, Vec<usize>)
+pub fn attach_nodes(mtx: &[Vec<u8>], mut nodes: Vec<Node>, mut left_nodes: Vec<usize>, node_count: usize) -> (Vec<Node>, Vec<usize>)
 {
     let n1 = nodes[node_count-1].node;
     //connect to node below if no wall is between
@@ -215,7 +215,7 @@ fn attach_nodes(mtx: &[Vec<u8>], mut nodes: Vec<Node>, mut left_nodes: Vec<usize
 }
 
 //n1 is above n2 and shares the same x
-fn wall_between_nodes_vert(mtx: &[Vec<u8>], n1: &Node, n2: &Node) -> bool
+pub fn wall_between_nodes_vert(mtx: &[Vec<u8>], n1: &Node, n2: &Node) -> bool
 {
     let x = n1.node.x;
     for i in n2.node.y..n1.node.y
@@ -226,7 +226,7 @@ fn wall_between_nodes_vert(mtx: &[Vec<u8>], n1: &Node, n2: &Node) -> bool
 }
 
 //n1 is left of n2 and shares the same y
-fn wall_between_nodes_horz(mtx: &[Vec<u8>], n1: &Node, n2: &Node) -> bool
+pub fn wall_between_nodes_horz(mtx: &[Vec<u8>], n1: &Node, n2: &Node) -> bool
 {
     let y = n1.node.y;
     for i in n1.node.x..n2.node.x
@@ -238,7 +238,7 @@ fn wall_between_nodes_horz(mtx: &[Vec<u8>], n1: &Node, n2: &Node) -> bool
 
 //Struct to store maze node
 #[derive(Copy, Clone)]
-struct MazeNode
+pub struct MazeNode
 {
     x: usize,
     y: usize,

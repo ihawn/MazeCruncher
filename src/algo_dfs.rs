@@ -116,7 +116,6 @@ pub fn graph_init(size: usize) -> Vec<Vec<LightNode>>
     maze_graph
 }
 
-
 #[derive(Copy, Clone)]
 pub struct LightNode
 {
