@@ -4,6 +4,7 @@ use minifb::Window;
 use std::collections::BinaryHeap;
 use std::collections::HashSet;
 
+
 pub fn kruskal(mut window: Window, buff_size: usize, mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_speed_mult: usize) -> (Vec<Vec<u8>>, Window)
 {
     let cell_count = usize::pow(size-1, 2)/4;
@@ -26,54 +27,37 @@ pub fn kruskal(mut window: Window, buff_size: usize, mut mtx: Vec<Vec<u8>>, size
 
 
     let mut edge_heap = get_edges(size);
-    let mut counter = 0;
+    let mut counter: u128 = 0;
+    let itt: u128 = edge_heap.len() as u128;
 
     while !edge_heap.is_empty()
     {
+        if counter%(itt/100) == 0
+        {
+            let m = 100*counter/itt + 1;
+            println!("Generating Maze: {}%", m);
+        }
+
+
         let edge = edge_heap.pop().unwrap();
               
         //Vertical edges
         if edge.x % 2 == 0
         {
-            let id = mirror[edge.x-1][edge.y];
-            if cell_sets[mirror[edge.x-1][edge.y] as usize] != cell_sets[mirror[edge.x+1][edge.y] as usize]//id != mirror[edge.x+1][edge.y]
+            if mirror[edge.x-1][edge.y] != mirror[edge.x+1][edge.y]
             {
-                let b = cell_sets[mirror[edge.x+1][edge.y] as usize].clone();
-                cell_sets[mirror[edge.x-1][edge.y] as usize].extend(&b);
-                cell_sets[mirror[edge.x-1][edge.y] as usize].insert((edge.x, edge.y));
-
-                //Change the maze and miror matrices accordingly
-                let last = cell_sets[mirror[edge.x+1][edge.y] as usize].clone();
-                for c in last
-                { 
-                    mtx[c.0][c.1] = 0;
-                    mirror[c.0][c.1] = id;
-                }
-                mtx[edge.x][edge.y] = 0;     
-                mirror[edge.x][edge.y] = 0;
-            }            
+                let s = set_merge(cell_sets, mtx, mirror, (edge.x-1, edge.y), (edge.x+1, edge.y), (edge.x, edge.y));
+                cell_sets = s.0; mtx = s.1; mirror = s.2;
+            }
         }
 
         //Horizontal edges
         else
         {
-            let id = mirror[edge.x][edge.y-1];
-            if cell_sets[mirror[edge.x][edge.y-1] as usize] != cell_sets[mirror[edge.x][edge.y+1] as usize] //id != mirror[edge.x][edge.y+1]
+            if mirror[edge.x][edge.y-1] != mirror[edge.x][edge.y+1]
             {
-                let b = cell_sets[mirror[edge.x][edge.y+1] as usize].clone();
-                cell_sets[mirror[edge.x][edge.y-1] as usize].extend(&b);
-                cell_sets[mirror[edge.x][edge.y-1] as usize].insert((edge.x, edge.y));
-
-                
-                //Change the maze and miror matrices accordingly
-                let last = cell_sets[mirror[edge.x][edge.y+1] as usize].clone();
-                for c in last
-                { 
-                    mtx[c.0][c.1] = 0;
-                    mirror[c.0][c.1] = id;
-                } 
-                mtx[edge.x][edge.y] = 0;     
-                mirror[edge.x][edge.y] = 0;
+                let s = set_merge(cell_sets, mtx, mirror, (edge.x, edge.y-1), (edge.x, edge.y+1), (edge.x, edge.y));
+                cell_sets = s.0; mtx = s.1; mirror = s.2;
             }
         }
 
@@ -82,6 +66,43 @@ pub fn kruskal(mut window: Window, buff_size: usize, mut mtx: Vec<Vec<u8>>, size
     }
 
     (mtx, window)
+}
+
+
+
+fn set_merge(mut cell_sets: Vec<HashSet<(usize, usize)>>, mut mtx: Vec<Vec<u8>>, mut mirror: Vec<Vec<u64>>, pt1: (usize, usize), pt2: (usize, usize), edge_pt: (usize, usize)) -> (Vec<HashSet<(usize, usize)>>, Vec<Vec<u8>>, Vec<Vec<u64>>)
+{
+    let a = cell_sets[mirror[pt1.0][pt1.1] as usize].clone();
+    let b = cell_sets[mirror[pt2.0][pt2.1] as usize].clone();
+    let c: HashSet<(usize, usize)>;
+    let id;
+
+    //Pick the longer of the two sets as the dominant one so changing the other's id takes less time
+    if b.len() < a.len()
+    {
+        cell_sets[mirror[pt1.0][pt1.1] as usize].extend(&b);
+        cell_sets[mirror[pt1.0][pt1.1] as usize].insert((edge_pt.0, edge_pt.1));
+        c = b;
+        id = mirror[pt1.0][pt1.1];
+    }
+    else
+    {
+        cell_sets[mirror[pt2.0][pt2.1] as usize].extend(&a);
+        cell_sets[mirror[pt2.0][pt2.1] as usize].insert((edge_pt.0, edge_pt.1));
+        c = a;
+        id = mirror[pt2.0][pt2.1];
+    }
+
+    //Change the maze and miror matrices accordingly    
+    for t in c
+    { 
+        mtx[t.0][t.1] = 0;
+        mirror[t.0][t.1] = id;
+    }
+    mtx[edge_pt.0][edge_pt.1] = 0;     
+    mirror[edge_pt.0][edge_pt.1] = 0; 
+
+    (cell_sets, mtx, mirror)
 }
 
 //Gets the maze edges and randomizes them. Returns all in a binary stack

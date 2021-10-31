@@ -12,7 +12,6 @@ pub fn mtx_to_img(mtx: &[Vec<u8>], size: usize, name: String)
     {
         for i in 0..size
         {
-
             //Determine which colors to assign based on the maze matrix
             if mtx[i][j] < u8::MAX && mtx[i][j] != 4
             {
