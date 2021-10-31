@@ -1,8 +1,12 @@
 use std::vec;
 use rand::Rng;
+use minifb::Window;
+
 
 pub fn generate_and_solve(mut size: usize, gen_algo: usize, algo: usize, decimation: usize, show_animation: bool, anim_scale: usize, anim_speed_mult: usize, save_maze: bool)
 {
+    println!("Generating Maze");
+
     //Make sure maze has odd size
     if size % 2 == 0
     {
@@ -11,8 +15,7 @@ pub fn generate_and_solve(mut size: usize, gen_algo: usize, algo: usize, decimat
 
     let n = size;
     let m = size;    
-    let mut m:Vec<Vec<u8>> = vec![vec![4; n]; m];
-    m = prime_matrix(m, size);
+    let mut m: Vec<Vec<u8>> = vec![vec![u8::MAX; n]; m];
 
     //Window init
     let buff_size = size*anim_scale;
@@ -23,27 +26,29 @@ pub fn generate_and_solve(mut size: usize, gen_algo: usize, algo: usize, decimat
         window = crate::utils::window_init(buff_size, "Maze!");
     }
     
-    window = crate::utils::update_window(window, show_animation, 0, &m, size, anim_speed_mult, buff_size);
-    let t = crate::growing_tree::growing_tree(window, buff_size, m, size, decimation, show_animation, anim_speed_mult, save_maze);
-    m = t.0; window = t.1;
-    crate::solve::solve_maze(window, buff_size, m, size, algo, show_animation, anim_speed_mult, save_maze);
-}
-
-//Initialize the zero matrix in a "cell" format which surrounds even entries with "walls"
-fn prime_matrix(mut mtx: Vec<Vec<u8>>, size: usize) -> Vec<Vec<u8>>
-{   
-    for i in 0..size
+    let t: (Vec<Vec<u8>>, Window);
+    match gen_algo
     {
-        for j in 0..size
-        {
-            if (i+1) % 2 != 0 || (j+1) % 2 != 0
-            {
-                mtx[i][j] = u8::MAX;
-            }
-        }
+        1 => t = crate::growing_tree::growing_tree(window, buff_size, m, size, show_animation, anim_speed_mult),
+        2 => t = crate::kruskal::kruskal(window, buff_size, m, size, show_animation, anim_speed_mult),
+        _ => t = crate::growing_tree::growing_tree(window, buff_size, m, size, show_animation, anim_speed_mult)
     }
 
-    mtx
+    m = t.0; window = t.1;
+    window = crate::utils::update_window(window, show_animation, 0, &m, size, anim_speed_mult, buff_size);
+    
+    //Prevent a perfect maze for decimation factor > 0
+    if decimation > 0 { m = crate::generate::decimate_maze(m, size, decimation); }
+
+    //print_matrix(&mtx, size);
+    if save_maze
+    {
+        crate::toimage::mtx_to_img(&m, size, "unsolved.png".to_string());
+    }
+    
+    println!("Maze Generation Complete");
+    
+    crate::solve::solve_maze(window, buff_size, m, size, algo, show_animation, anim_speed_mult, save_maze);
 }
 
 //Remove walls to allow for multiple solutions

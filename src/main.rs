@@ -6,6 +6,7 @@ mod toimage;
 mod solve;
 mod utils;
 mod growing_tree;
+mod kruskal;
 mod algo_dfs;
 mod algo_astar;
 mod algo_tremaux;
@@ -32,7 +33,7 @@ fn main()
     let mut anim_scale = 7;
     let mut anim_speed = 4;
     let mut algo = 8;
-    let mut gen_algo = 1;
+    let mut gen_algo = 2;
     let mut decimation = 0;
 
 

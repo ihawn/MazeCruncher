@@ -2,13 +2,11 @@ use rand::Rng;
 use minifb::Window;
 
 //Growing Tree Algorithm for implementing a "perfect" maze i.e. only one solution
-pub fn growing_tree(mut window: Window, buff_size: usize, mut mtx: Vec<Vec<u8>>, size: usize, decimation: usize, show_animation: bool, anim_speed_mult: usize, save_maze: bool) -> (Vec<Vec<u8>>, Window)
+pub fn growing_tree(mut window: Window, buff_size: usize, mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_speed_mult: usize) -> (Vec<Vec<u8>>, Window)
 {
 
 
     //Maze generation init
-    println!("Generating Maze");
-    let factor = decimation;
     let cell_size = (size - 1)/2;
     let mut x = rand::thread_rng().gen_range(0..cell_size)*2 + 1;
     let mut y = rand::thread_rng().gen_range(0..cell_size)*2 + 1;
@@ -80,16 +78,7 @@ pub fn growing_tree(mut window: Window, buff_size: usize, mut mtx: Vec<Vec<u8>>,
         }
     }
 
-    //Prevent a perfect maze for decimation factor > 0
-    if factor > 0 { mtx = crate::generate::decimate_maze(mtx, size, factor); }
 
-    //print_matrix(&mtx, size);
-    if save_maze
-    {
-        crate::toimage::mtx_to_img(&mtx, size, "unsolved.png".to_string());
-    }
-
-    println!("Maze Generation Complete");
     (mtx, window)
 }
 

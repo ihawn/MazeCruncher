@@ -12,7 +12,7 @@ pub fn _2d_to_flat_color(mtx: &[Vec<u8>], size: usize, n: usize, b: usize) -> u3
     let y = b%size;
 
     //Set colors for animation (different than for the image since the animation is based on a 32 bit frame buffer)
-    if mtx[x][y] < u8::MAX && mtx[x][y] != 4
+    if mtx[x][y] < u8::MAX
     {
         if mtx[x][y] == 0 { white } //space
         else if mtx[x][y] == 1 { red } //travelled once

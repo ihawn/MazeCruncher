@@ -22,7 +22,7 @@ pub fn astar(mut window: Window, params: crate::solve::MazeParams) -> Window
     //Algo init
     let mut maze = graph_init(&mtx, size, start_x, start_y, end_x, end_y);
 
-    let mut open_heap: BinaryHeap<Node>/*BinaryHeap<MazeNode>*/ = BinaryHeap::new();
+    let mut open_heap: BinaryHeap<Node> = BinaryHeap::new();
     maze[0].node.open = true;
     open_heap.push(maze[0].clone());
 
@@ -105,7 +105,7 @@ pub fn astar(mut window: Window, params: crate::solve::MazeParams) -> Window
 }
 
 //Initialize graph from the maze matrix
-pub fn graph_init(mtx: &[Vec<u8>], size: usize, start_x: usize, start_y: usize, end_x: usize, end_y: usize) -> Vec<Node>//Vec<Vec<MazeNode>>
+fn graph_init(mtx: &[Vec<u8>], size: usize, start_x: usize, start_y: usize, end_x: usize, end_y: usize) -> Vec<Node>//Vec<Vec<MazeNode>>
 {
     println!("Building graph...");
 
@@ -180,7 +180,7 @@ pub fn graph_init(mtx: &[Vec<u8>], size: usize, start_x: usize, start_y: usize, 
     nodes
 }
 
-pub fn attach_nodes(mtx: &[Vec<u8>], mut nodes: Vec<Node>, mut left_nodes: Vec<usize>, node_count: usize) -> (Vec<Node>, Vec<usize>)
+fn attach_nodes(mtx: &[Vec<u8>], mut nodes: Vec<Node>, mut left_nodes: Vec<usize>, node_count: usize) -> (Vec<Node>, Vec<usize>)
 {
     let n1 = nodes[node_count-1].node;
     //connect to node below if no wall is between
@@ -215,7 +215,7 @@ pub fn attach_nodes(mtx: &[Vec<u8>], mut nodes: Vec<Node>, mut left_nodes: Vec<u
 }
 
 //n1 is above n2 and shares the same x
-pub fn wall_between_nodes_vert(mtx: &[Vec<u8>], n1: &Node, n2: &Node) -> bool
+fn wall_between_nodes_vert(mtx: &[Vec<u8>], n1: &Node, n2: &Node) -> bool
 {
     let x = n1.node.x;
     for i in n2.node.y..n1.node.y
@@ -226,7 +226,7 @@ pub fn wall_between_nodes_vert(mtx: &[Vec<u8>], n1: &Node, n2: &Node) -> bool
 }
 
 //n1 is left of n2 and shares the same y
-pub fn wall_between_nodes_horz(mtx: &[Vec<u8>], n1: &Node, n2: &Node) -> bool
+fn wall_between_nodes_horz(mtx: &[Vec<u8>], n1: &Node, n2: &Node) -> bool
 {
     let y = n1.node.y;
     for i in n1.node.x..n2.node.x
@@ -238,7 +238,7 @@ pub fn wall_between_nodes_horz(mtx: &[Vec<u8>], n1: &Node, n2: &Node) -> bool
 
 //Struct to store maze node
 #[derive(Copy, Clone)]
-pub struct MazeNode
+struct MazeNode
 {
     x: usize,
     y: usize,
@@ -251,7 +251,7 @@ pub struct MazeNode
 }
 
 #[derive(Clone)]
-pub struct Node
+struct Node
 {
     node: MazeNode,
     connected: Vec<usize>,
