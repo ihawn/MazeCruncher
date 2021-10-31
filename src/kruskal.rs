@@ -40,6 +40,7 @@ pub fn kruskal(mut window: Window, buff_size: usize, mut mtx: Vec<Vec<u8>>, size
 
 
         let edge = edge_heap.pop().unwrap();
+
               
         //Vertical edges
         if edge.x % 2 == 0
@@ -61,8 +62,27 @@ pub fn kruskal(mut window: Window, buff_size: usize, mut mtx: Vec<Vec<u8>>, size
             }
         }
 
+        
+
         window = crate::utils::update_window(window, show_animation, counter, &mtx, size, anim_speed_mult, buff_size);
         counter += 1;
+    }
+
+    
+    //Remove odd edge
+    for i in 1..size-1
+    {
+        for j in 1..size-1
+        {
+            let mut sum = 0;
+            let perm_x: Vec<i8> = vec![1, 1, -1, -1];
+            let perm_y: Vec<i8> = vec![1, -1, 1, -1];
+            for k in 0..4
+            {
+                if mtx[i+perm_x[k] as usize][j+perm_y[k] as usize] == u8::MAX { sum += 1; }
+            }
+            if sum == 4 { mtx[i][j] = 0; }
+        }
     }
 
     (mtx, window)
