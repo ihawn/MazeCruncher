@@ -88,6 +88,15 @@ pub fn update_counter(mut max: usize, x: usize, y: usize, size: usize, name: &st
     max
 }
 
+pub fn update_gen_counter(itt: u128, counter: u128)
+{
+    if counter%(itt/100) == 0
+    {
+        let m = 100*counter/itt + 1;
+        println!("Generating Maze: {}%", m);
+    }
+}
+
 //Fill in matrix values between nodes for the animation/solution image
 pub fn fill_between_nodes(mut mtx: Vec<Vec<u8>>, x1: usize, y1: usize, x2: usize, y2: usize, val: u8) -> Vec<Vec<u8>>
 {

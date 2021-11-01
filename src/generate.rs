@@ -31,6 +31,7 @@ pub fn generate_and_solve(mut size: usize, gen_algo: usize, algo: usize, decimat
     {
         1 => t = crate::growing_tree::growing_tree(window, buff_size, m, size, show_animation, anim_speed_mult),
         2 => t = crate::kruskal::kruskal(window, buff_size, m, size, show_animation, anim_speed_mult),
+        3 => t = crate::prim::prim(window, buff_size, m, size, show_animation, anim_speed_mult),
         _ => t = crate::growing_tree::growing_tree(window, buff_size, m, size, show_animation, anim_speed_mult)
     }
 

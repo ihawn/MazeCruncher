@@ -32,15 +32,9 @@ pub fn kruskal(mut window: Window, buff_size: usize, mut mtx: Vec<Vec<u8>>, size
 
     while !edge_heap.is_empty()
     {
-        if counter%(itt/100) == 0
-        {
-            let m = 100*counter/itt + 1;
-            println!("Generating Maze: {}%", m);
-        }
-
+        crate::utils::update_gen_counter(itt, counter);
 
         let edge = edge_heap.pop().unwrap();
-
               
         //Vertical edges
         if edge.x % 2 == 0

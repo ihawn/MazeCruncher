@@ -4,8 +4,6 @@ use minifb::Window;
 //Growing Tree Algorithm for implementing a "perfect" maze i.e. only one solution
 pub fn growing_tree(mut window: Window, buff_size: usize, mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_speed_mult: usize) -> (Vec<Vec<u8>>, Window)
 {
-
-
     //Maze generation init
     let cell_size = (size - 1)/2;
     let mut x = rand::thread_rng().gen_range(0..cell_size)*2 + 1;
@@ -20,11 +18,7 @@ pub fn growing_tree(mut window: Window, buff_size: usize, mut mtx: Vec<Vec<u8>>,
     let itt: u128 = (s - 3)*(s + 1)/4;
     for k in 0..itt
     {
-        if k%(itt/100) == 0
-        {
-            let m = 100*k/itt + 1;
-            println!("Generating Maze: {}%", m);
-        }
+        crate::utils::update_gen_counter(itt, k);
 
         window = crate::utils::update_window(window, show_animation, k, &mtx, size, anim_speed_mult, buff_size);
 
