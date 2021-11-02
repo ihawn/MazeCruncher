@@ -44,36 +44,44 @@ pub fn growing_tree(mut window: Window, buff_size: usize, mut mtx: Vec<Vec<u8>>,
 
         if !x_list.is_empty()
         {
-            //movement up, right, down, or left
-            match travel[n]
-            {
-                1 => {mtx[x][y-2] = 0;
-                    mtx[x][y-1] = 0;
-                    x_list.push(x);
-                    y_list.push(y-2)},
-
-                2 => {mtx[x+2][y] = 0;
-                    mtx[x+1][y] = 0;
-                    x_list.push(x+2);
-                    y_list.push(y)},
-
-                3 => {mtx[x][y+2] = 0;
-                    mtx[x][y+1] = 0;
-                    x_list.push(x);
-                    y_list.push(y+2)},
-
-                4 => {mtx[x-2][y] = 0;
-                    mtx[x-1][y] = 0;
-                    x_list.push(x-2);
-                    y_list.push(y)},
-
-                _ => println!("Something terrible has happened"),
-            }
+            let t = travel_rand(mtx, x, y, n, travel, x_list, y_list);
+            mtx = t.0; x_list = t.1; y_list = t.2;
         }
     }
 
 
     (mtx, window)
+}
+
+fn travel_rand(mut mtx: Vec<Vec<u8>>, x: usize, y: usize, n: usize, travel: Vec<i32>, mut x_list: Vec<usize>, mut y_list: Vec<usize>) -> (Vec<Vec<u8>>, Vec<usize>, Vec<usize>)
+{
+    //movement up, right, down, or left
+    match travel[n]
+    {
+        1 => {mtx[x][y-2] = 0;
+              mtx[x][y-1] = 0;
+              x_list.push(x);
+              y_list.push(y-2)},
+
+        2 => {mtx[x+2][y] = 0;
+              mtx[x+1][y] = 0;
+              x_list.push(x+2);
+              y_list.push(y)},
+
+        3 => {mtx[x][y+2] = 0;
+              mtx[x][y+1] = 0;
+              x_list.push(x);
+              y_list.push(y+2)},
+
+        4 => {mtx[x-2][y] = 0;
+              mtx[x-1][y] = 0;
+              x_list.push(x-2);
+              y_list.push(y)},
+
+        _ => println!("Something terrible has happened"),
+    }
+
+    (mtx, x_list, y_list)
 }
 
 //Function to determine if current cell has any adjacent, non-visited cells

@@ -8,6 +8,7 @@ mod utils;
 mod growing_tree;
 mod kruskal;
 mod prim;
+mod huntkill;
 mod algo_dfs;
 mod algo_astar;
 mod algo_tremaux;
@@ -28,13 +29,13 @@ fn main()
 ");
 
 
-    let mut size: usize = 400;
+    let mut size: usize = 150;
     let mut save_maze = true;
     let mut show_animation = true;
-    let mut anim_scale = 3;
-    let mut anim_speed = 40;
-    let mut algo = 4;
-    let mut gen_algo = 3;
+    let mut anim_scale = 5;
+    let mut anim_speed = 3;
+    let mut algo = 8;
+    let mut gen_algo = 4;
     let mut decimation = 0;
 
 
@@ -44,7 +45,7 @@ fn main()
 
     if !use_default
     {
-        gen_algo = read_int("Select generation algo".to_string(), "1) Growing Tree\n2) Kruskal (small mazes only)\n3) Prim".to_string(), 1);
+        gen_algo = read_int("Select generation algo".to_string(), "1) Growing Tree\n2) Kruskal (small mazes only)\n3) Prim\n4) Hunt and Kill".to_string(), 1);
         algo = read_int("Select solution algorithm:".to_string(), "1) Depth First Search\n2) Breadth First Search\n3) Dead End Filling\n4) A*\n5) Double A*\n6) Dijkstra\n7) Tremaux\n8) All of them!".to_string(), 2);
         decimation = read_int("Select maze decimation probability (0 = perfect maze)".to_string(), "0-100: ".to_string(), 2);
         save_maze = read_bool("Save the solved and unsolved maze?".to_string(), "y/n: ".to_string());
