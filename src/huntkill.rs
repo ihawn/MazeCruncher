@@ -3,7 +3,7 @@ use rand::Rng;
 use std::collections::BinaryHeap;
 use std::{cmp::Ordering};
 
-//Growing Tree Algorithm for implementing a "perfect" maze i.e. only one solution
+
 pub fn hunt_and_kill(mut window: Window, buff_size: usize, mut mtx: Vec<Vec<u8>>, size: usize, show_animation: bool, anim_speed_mult: usize) -> (Vec<Vec<u8>>, Window)
 {
     //Maze generation init

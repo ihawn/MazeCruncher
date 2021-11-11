@@ -9,6 +9,7 @@ mod growing_tree;
 mod kruskal;
 mod prim;
 mod huntkill;
+mod binarytree;
 mod algo_dfs;
 mod algo_astar;
 mod algo_tremaux;
@@ -35,7 +36,7 @@ fn main()
     let mut anim_scale = 5;
     let mut anim_speed = 3;
     let mut algo = 8;
-    let mut gen_algo = 4;
+    let mut gen_algo = 1;
     let mut decimation = 0;
 
 
