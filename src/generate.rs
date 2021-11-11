@@ -26,6 +26,7 @@ pub fn generate_and_solve(mut size: usize, gen_algo: usize, algo: usize, decimat
         window = crate::utils::window_init(buff_size, "Maze!");
     }
     
+    
     let t: (Vec<Vec<u8>>, Window);
     match gen_algo
     {
