@@ -46,7 +46,7 @@ fn main()
 
     if !use_default
     {
-        gen_algo = read_int("Select generation algo".to_string(), "1) Growing Tree\n2) Kruskal (small mazes only)\n3) Prim\n4) Hunt and Kill".to_string(), 1);
+        gen_algo = read_int("Select generation algo".to_string(), "1) Growing Tree\n2) Kruskal (small mazes only)\n3) Prim\n4) Hunt and Kill\n5) Binary Tree".to_string(), 1);
         algo = read_int("Select solution algorithm:".to_string(), "1) Depth First Search\n2) Breadth First Search\n3) Dead End Filling\n4) A*\n5) Double A*\n6) Dijkstra\n7) Tremaux\n8) All of them!".to_string(), 2);
         decimation = read_int("Select maze decimation probability (0 = perfect maze)".to_string(), "0-100: ".to_string(), 2);
         save_maze = read_bool("Save the solved and unsolved maze?".to_string(), "y/n: ".to_string());
