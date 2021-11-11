@@ -10,6 +10,7 @@ mod kruskal;
 mod prim;
 mod huntkill;
 mod binarytree;
+mod eller;
 mod algo_dfs;
 mod algo_astar;
 mod algo_tremaux;
@@ -34,9 +35,9 @@ fn main()
     let mut save_maze = true;
     let mut show_animation = true;
     let mut anim_scale = 5;
-    let mut anim_speed = 3;
-    let mut algo = 8;
-    let mut gen_algo = 1;
+    let mut anim_speed = 1;
+    let mut algo = 4;
+    let mut gen_algo = 6;
     let mut decimation = 0;
 
 
