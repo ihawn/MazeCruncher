@@ -5,7 +5,6 @@ use std::collections::BinaryHeap;
 use std::mem::size_of_val;
 
 
-
 pub fn astar(mut window: Window, params: crate::solve::MazeParams) -> Window
 {
     let mut mtx = params.mtx;
