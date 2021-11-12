@@ -11,9 +11,9 @@ pub fn binary_tree(mut window: Window, buff_size: usize, mut mtx: Vec<Vec<u8>>, 
 
     let itt: u128 = (size as u128)*(size as u128);
     let mut k = 0;
-    for j in (1..size-1).step_by(2)
+    for i in (1..size-1).step_by(2)
     {
-        for i in (1..size-1).step_by(2)
+        for j in (1..size-1).step_by(2)
         {
             window = crate::utils::update_window(window, show_animation, k, &mtx, size, anim_speed_mult, buff_size);
             crate::utils::update_gen_counter(itt, k);
@@ -27,16 +27,16 @@ pub fn binary_tree(mut window: Window, buff_size: usize, mut mtx: Vec<Vec<u8>>, 
                 {
                     mtx[i+1][j] = 0;
                 }
-                else if j+1 != size-1
+                else if j > 1
                 {
-                    mtx[i][j+1] = 0;
+                    mtx[i][j-1] = 0;
                 }
             }
             else
             {
-                if j+1 != size-1
+                if j > 1
                 {
-                    mtx[i][j+1] = 0;
+                    mtx[i][j-1] = 0;
                 }
                 else if i+1 != size-1
                 {

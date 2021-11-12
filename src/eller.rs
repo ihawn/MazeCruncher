@@ -18,6 +18,15 @@ pub fn eller(mut window: Window, buff_size: usize, mut mtx: Vec<Vec<u8>>, size: 
 
     for j in (1..size-1).step_by(2)
     {
+        for j in 0..size
+        {
+            for i in 0..size
+            {
+                print!(" {} ", mirror[i][j])
+            }
+            println!("")
+        }
+
         //initialize current mirror matrix row
         for i in (1..size-1).step_by(2)
         {
@@ -34,10 +43,20 @@ pub fn eller(mut window: Window, buff_size: usize, mut mtx: Vec<Vec<u8>>, size: 
         }
 
         //lateral join   
-        let join_count = rand::thread_rng().gen_range(0..(size-1)/2); //Determine how many locations not to join
+        let join_count = rand::thread_rng().gen_range(0..(size-1)); //Determine how many locations not to join
         let mut locs = row_locs.clone();
-        for _p in 0..join_count { locs.remove(rand::thread_rng().gen_range(0..locs.len())); } //remove locations not to join
 
+        //remove locations not to join
+        let mut p = locs.len();
+        let mut u = 0;
+        while p > 0 && u < join_count
+        {
+            locs.remove(rand::thread_rng().gen_range(0..locs.len()));
+            p-=1;
+            u+=1;
+        }
+
+        println!("{}", join_count);
         for i in 0..locs.len()
         {   
             let x = locs[i];
@@ -80,7 +99,7 @@ pub fn eller(mut window: Window, buff_size: usize, mut mtx: Vec<Vec<u8>>, size: 
         //vertical join
         for s in sets
         {
-            let join_count =  rand::thread_rng().gen_range(1..max((s.1 - s.0)/2, 2));
+            let join_count = rand::thread_rng().gen_range(1..max((s.1 - s.0)/2, 2));
             let mut join_pos: Vec<usize> = vec![];
             for i in (s.0..s.1).step_by(2) { join_pos.push(i); } //Set join init
 
@@ -104,6 +123,8 @@ pub fn eller(mut window: Window, buff_size: usize, mut mtx: Vec<Vec<u8>>, size: 
             window = crate::utils::update_window(window, show_animation, k, &mtx, size, anim_speed_mult, buff_size);
         }
     }
+
+
 
     (mtx, window)
 }

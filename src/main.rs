@@ -31,7 +31,7 @@ fn main()
 ");
 
 
-    let mut size: usize = 150;
+    let mut size: usize = 110;
     let mut save_maze = true;
     let mut show_animation = true;
     let mut anim_scale = 5;
