@@ -35,7 +35,6 @@ pub fn generate_and_solve(mut size: usize, gen_algo: usize, algo: usize, decimat
         3 => t = crate::prim::prim(window, buff_size, m, size, show_animation, anim_speed_mult),
         4 => t = crate::huntkill::hunt_and_kill(window, buff_size, m, size, show_animation, anim_speed_mult),
         5 => t = crate::binarytree::binary_tree(window, buff_size, m, size, show_animation, anim_speed_mult),
-        6 => t = crate::eller::eller(window, buff_size, m, size, show_animation, anim_speed_mult),
         _ => t = crate::growing_tree::growing_tree(window, buff_size, m, size, show_animation, anim_speed_mult)
     }
 
