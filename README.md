@@ -2,7 +2,6 @@
 Welcome to maze cruncher!
 
 <a href="https://github.com/ihawn/MazeCruncher/releases/tag/MazeCruncher">Download Here</a>
-![alt text](https://github.com/ihawn/MazeCruncher/blob/main/SmallMaze.gif | width=100)
 
 ## Usage
 * To get started, just run the standalone .exe or compile and run the source code yourself.
@@ -28,6 +27,10 @@ Welcome to maze cruncher!
 
 * **Animation Speed:** The speed scale for the maze animation. 1 = n cell traversals per second where n = your monitor's refresh rate.
 
-## A maze generated and solved using Depth First Search with size = 1024:
+## A maze generated with hunt and kill and solved with Dijkstra's
+
+![alt text](https://github.com/ihawn/MazeCruncher/blob/main/SmallMaze.gif)
+
+## A maze solved using Depth First Search with size = 1024:
 
 ![alt text](https://github.com/ihawn/MazeCruncher/blob/main/1024.png)
