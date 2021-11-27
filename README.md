@@ -11,7 +11,9 @@ Welcome to maze cruncher!
 
 ## Settings
 
-* **Algorithm:** Current available algorithms are Depth First Search, Breadth First Search, Dead-end Filling, A*, double A*, Dijkstra, and Tremaux.
+* **Generation Algorithm:** Current available algorithms are Growing Tree, Kruskal, Prim, Hunt and Kill, and Binary Tree.
+
+* **Solution Algorithm:** Current available algorithms are Depth First Search, Breadth First Search, Dead-end Filling, A*, double A*, Dijkstra, and Tremaux.
 
 * **Maze Decimation Probability:** Setting this to zero will ensure the maze has only one solution. Setting this to anything greater than zero will increase the probability of more paths.
 
