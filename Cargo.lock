@@ -418,7 +418,7 @@ checksum = "60302e4db3a61da70c0cb7991976248362f30319e88850c487b9b95bbf059e00"
 
 [[package]]
 name = "maze_cruncher"
-version = "1.9.3"
+version = "1.10.0"
 dependencies = [
  "image",
  "minifb",
