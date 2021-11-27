@@ -2,7 +2,7 @@
 Welcome to maze cruncher!
 
 <a href="https://github.com/ihawn/MazeCruncher/releases/tag/MazeCruncher">Download Here</a>
-![alt text](https://github.com/ihawn/MazeCruncher/blob/main/SmallMaze.gif=250x250)
+![alt text](https://github.com/ihawn/MazeCruncher/blob/main/SmallMaze.gif | width=100)
 
 ## Usage
 * To get started, just run the standalone .exe or compile and run the source code yourself.
