@@ -8,7 +8,6 @@ pub fn binary_tree(mut window: Window, buff_size: usize, mut mtx: Vec<Vec<u8>>, 
     let y = 1;
     mtx[x][y] = 0;
 
-
     let itt: u128 = (size as u128)*(size as u128);
     let mut k = 0;
     for i in (1..size-1).step_by(2)
