@@ -27,10 +27,10 @@ Welcome to maze cruncher!
 
 * **Animation Speed:** The speed scale for the maze animation. 1 = n cell traversals per second where n = your monitor's refresh rate.
 
-## A maze generated and solved using Depth First Search with size = 1024:
-
-![alt text](https://github.com/ihawn/MazeCruncher/blob/main/1024.png)
-
 ## A maze generated with hunt and kill and solved with Dijkstra's
 
 ![alt text](https://github.com/ihawn/MazeCruncher/blob/main/SmallMaze.gif)
+
+## A maze generated and solved using Depth First Search with size = 1024:
+
+![alt text](https://github.com/ihawn/MazeCruncher/blob/main/1024.png)
