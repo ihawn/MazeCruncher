@@ -2,7 +2,6 @@
 Welcome to maze cruncher!
 
 <a href="https://github.com/ihawn/MazeCruncher/releases/tag/MazeCruncher">Download Here</a>
-![alt text](https://github.com/ihawn/MazeCruncher/blob/main/SmallMaze.gif)
 
 ## Usage
 * To get started, just run the standalone .exe or compile and run the source code yourself.
@@ -31,3 +30,7 @@ Welcome to maze cruncher!
 ## A maze generated and solved using Depth First Search with size = 1024:
 
 ![alt text](https://github.com/ihawn/MazeCruncher/blob/main/1024.png)
+
+## A maze generated with hunt and kill and solved with Dijkstra's
+
+![alt text](https://github.com/ihawn/MazeCruncher/blob/main/SmallMaze.gif)
