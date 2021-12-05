@@ -27,7 +27,7 @@ Welcome to maze cruncher!
 
 * **Animation Speed:** The speed scale for the maze animation. 1 = n cell traversals per second where n = your monitor's refresh rate.
 
-## A maze generated with hunt and kill and solved with Dijkstra's
+## A small maze generated with Hunt and Kill and solved with Dijkstra's
 
 ![alt text](https://github.com/ihawn/MazeCruncher/blob/main/SmallMaze.gif)
 
